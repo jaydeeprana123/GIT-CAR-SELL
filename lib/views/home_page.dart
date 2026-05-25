@@ -5,9 +5,33 @@ import '../controllers/auth_controller.dart';
 import '../models/car_report.dart';
 import 'report_form_page.dart';
 import 'report_details_page.dart';
+import 'sold_car_form_dialog.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      // Re-trigger build to show correct floating action button on tab swap
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   Future<void> _deleteReport(BuildContext context, CarReportController controller, int id) async {
     final confirmed = await showDialog<bool>(
@@ -39,6 +63,18 @@ class HomePage extends StatelessWidget {
     }
   }
 
+  Future<void> _markAsSold(BuildContext context, CarReport report) async {
+    final result = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => SoldCarFormDialog(car: report),
+    );
+    if (result == true) {
+      Get.find<CarReportController>().fetchReports();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -58,10 +94,10 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Custom Header with Gradient and Brand Logo
+            // Custom Header with Gradient, Brand Logo, and TabBar
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              padding: const EdgeInsets.only(top: 24, left: 24, right: 24, bottom: 8),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -189,7 +225,8 @@ class HomePage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
+                  
                   // Search Bar
                   Container(
                     decoration: BoxDecoration(
@@ -215,84 +252,190 @@ class HomePage extends StatelessWidget {
                               )
                             : const SizedBox.shrink()),
                         border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
+                  const SizedBox(height: 14),
 
-            const SizedBox(height: 16),
-
-            // Section Header
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Obx(() => Text(
-                        'તાજેતરના ઇન્સ્પેક્શન (${controller.reports.length})',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                  Obx(() => controller.isLoading.value
-                      ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const SizedBox.shrink()),
-                ],
-              ),
-            ),
-
-            // Report List
-            Expanded(
-              child: Obx(() {
-                if (controller.isLoading.value && controller.reports.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (controller.reports.isEmpty) {
-                  return _buildEmptyState();
-                }
-                return RefreshIndicator(
-                  onRefresh: controller.fetchReports,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    itemCount: controller.reports.length,
-                    itemBuilder: (context, index) {
-                      final report = controller.reports[index];
-                      return _buildReportCard(context, controller, report);
-                    },
+                  // Integrated tab navigation bar
+                  TabBar(
+                    controller: _tabController,
+                    indicatorColor: Colors.tealAccent,
+                    indicatorWeight: 3.5,
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.white.withOpacity(0.55),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, letterSpacing: 0.2),
+                    unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal, fontSize: 13),
+                    tabs: const [
+                      Tab(
+                        icon: Icon(Icons.directions_car_outlined, size: 18),
+                        text: 'ઉપલબ્ધ કાર (Unsold)',
+                      ),
+                      Tab(
+                        icon: Icon(Icons.check_circle_outline, size: 18),
+                        text: 'વેચેલી કાર (Sold)',
+                      ),
+                    ],
                   ),
-                );
-              }),
+                ],
+              ),
+            ),
+
+            // TabBarView Body contents
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildUnsoldTab(context, controller),
+                  _buildSoldTab(context, controller),
+                ],
+              ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ReportFormPage()),
-          );
-          if (result == true) {
-            controller.fetchReports();
+          if (_tabController.index == 0) {
+            // New inspection form for unsold cars
+            final result = await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ReportFormPage()),
+            );
+            if (result == true) {
+              controller.fetchReports();
+            }
+          } else {
+            // New manual entry form for sold cars
+            final result = await showModalBottomSheet<bool>(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) => const SoldCarFormDialog(),
+            );
+            if (result == true) {
+              controller.fetchReports();
+            }
           }
         },
-        icon: const Icon(Icons.add_photo_alternate, color: Colors.white),
-        label: const Text('નવું ઇન્સ્પેક્શન', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        icon: Icon(_tabController.index == 0 ? Icons.add_photo_alternate : Icons.sell, color: Colors.white),
+        label: Text(
+          _tabController.index == 0 ? 'નવું ઇન્સ્પેક્શન' : 'નવી વેચેલી કાર',
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: theme.colorScheme.primary,
         elevation: 6,
       ),
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildUnsoldTab(BuildContext context, CarReportController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Obx(() => Text(
+                    'ઉપલબ્ધ ગાડીઓ (${controller.reports.length})',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  )),
+              Obx(() => controller.isLoading.value
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const SizedBox.shrink()),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Obx(() {
+            if (controller.isLoading.value && controller.reports.isEmpty) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (controller.reports.isEmpty) {
+              return _buildEmptyState('કોઈ ઉપલબ્ધ કાર મળી નથી', 'નવી કાર ઉમેરવા માટે નીચેના બટન પર ક્લિક કરો');
+            }
+            return RefreshIndicator(
+              onRefresh: controller.fetchReports,
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                itemCount: controller.reports.length,
+                itemBuilder: (context, index) {
+                  final report = controller.reports[index];
+                  return _buildReportCard(context, controller, report, isSold: false);
+                },
+              ),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSoldTab(BuildContext context, CarReportController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Obx(() => Text(
+                    'વેચેલી ગાડીઓ (${controller.soldReports.length})',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  )),
+              Obx(() => controller.isLoading.value
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const SizedBox.shrink()),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Obx(() {
+            if (controller.isLoading.value && controller.soldReports.isEmpty) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (controller.soldReports.isEmpty) {
+              return _buildEmptyState('કોઈ વેચેલી કાર મળી નથી', 'વેચેલી કારની માહિતી મેન્યુઅલ ઉમેરવા નીચેના બટન પર ક્લિક કરો');
+            }
+            return RefreshIndicator(
+              onRefresh: controller.fetchReports,
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                itemCount: controller.soldReports.length,
+                itemBuilder: (context, index) {
+                  final report = controller.soldReports[index];
+                  return _buildReportCard(context, controller, report, isSold: true);
+                },
+              ),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEmptyState(String title, String subtitle) {
     return Center(
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -301,18 +444,18 @@ class HomePage extends StatelessWidget {
           children: [
             Icon(
               Icons.directions_car_outlined,
-              size: 80,
-              color: Colors.grey.withOpacity(0.5),
+              size: 70,
+              color: Colors.grey.withOpacity(0.4),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'કોઈ ઇન્સ્પેક્શન મળ્યું નથી',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'નવું ઇન્સ્પેક્શન ઉમેરવા માટે નીચેના બટન પર ક્લિક કરો',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+            const SizedBox(height: 6),
+            Text(
+              subtitle,
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
               textAlign: TextAlign.center,
             ),
           ],
@@ -321,7 +464,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildReportCard(BuildContext context, CarReportController controller, CarReport report) {
+  Widget _buildReportCard(BuildContext context, CarReportController controller, CarReport report, {required bool isSold}) {
     final theme = Theme.of(context);
     final photoCount = report.images.length;
 
@@ -330,6 +473,9 @@ class HomePage extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isSold ? Colors.tealAccent.withOpacity(0.06) : Colors.white.withOpacity(0.04),
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
@@ -357,19 +503,21 @@ class HomePage extends StatelessWidget {
                 children: [
                   // Icon indicator
                   Container(
-                    width: 54,
-                    height: 54,
+                    width: 50,
+                    height: 50,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
+                      color: isSold 
+                          ? Colors.teal.withOpacity(0.15)
+                          : theme.colorScheme.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(14),
                     ),
                     child: Icon(
-                      Icons.directions_car,
-                      color: theme.colorScheme.primary,
-                      size: 28,
+                      isSold ? Icons.task_alt_rounded : Icons.directions_car,
+                      color: isSold ? Colors.tealAccent : theme.colorScheme.primary,
+                      size: 26,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 14),
                   // Report details
                   Expanded(
                     child: Column(
@@ -378,59 +526,121 @@ class HomePage extends StatelessWidget {
                         Text(
                           report.model.isEmpty ? 'અજ્ઞાત મોડેલ' : report.model,
                           style: const TextStyle(
-                            fontSize: 17,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 4),
-                        Text(
-                          'ઓનર: ${report.owner.isEmpty ? 'N/A' : report.owner}',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: theme.hintColor,
+                        if (isSold) ...[
+                          Text(
+                            'ગ્રાહક: ${report.customerName ?? 'N/A'}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: theme.hintColor,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 6),
-                        Row(
-                          children: [
-                            Icon(Icons.speed, size: 14, color: theme.colorScheme.secondary),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${report.kilometers} km',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: theme.hintColor,
-                                fontWeight: FontWeight.w500,
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              const Icon(Icons.currency_rupee, size: 13, color: Colors.tealAccent),
+                              Text(
+                                '${report.soldPrice ?? '0'}',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.tealAccent,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 16),
-                            Icon(Icons.photo_library_outlined, size: 14, color: theme.colorScheme.secondary),
-                            const SizedBox(width: 4),
-                            Text(
-                              '$photoCount ફોટો',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: theme.hintColor,
-                                fontWeight: FontWeight.w500,
+                              const SizedBox(width: 12),
+                              Icon(Icons.calendar_today_outlined, size: 12, color: theme.hintColor),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${report.soldDate ?? ''}',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: theme.hintColor,
+                                ),
                               ),
+                            ],
+                          ),
+                        ] else ...[
+                          Text(
+                            'ઓનર: ${report.owner.isEmpty ? 'N/A' : report.owner}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: theme.hintColor,
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              Icon(Icons.speed, size: 14, color: theme.colorScheme.secondary),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${report.kilometers} km',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: theme.hintColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Icon(Icons.photo_library_outlined, size: 14, color: theme.colorScheme.secondary),
+                              const SizedBox(width: 4),
+                              Text(
+                                '$photoCount ફોટો',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: theme.hintColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ],
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  
                   // Actions/Date
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
-                        onPressed: () => _deleteReport(context, controller, report.id!),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (!isSold) ...[
+                            // Mark as sold button
+                            TextButton.icon(
+                              onPressed: () => _markAsSold(context, report),
+                              icon: const Icon(Icons.sell_outlined, size: 12, color: Colors.tealAccent),
+                              label: const Text(
+                                'વેચેલ',
+                                style: TextStyle(color: Colors.tealAccent, fontSize: 10, fontWeight: FontWeight.bold),
+                              ),
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                                backgroundColor: Colors.teal.withOpacity(0.12),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                          ],
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 20),
+                            onPressed: () => _deleteReport(context, controller, report.id!),
+                            constraints: const BoxConstraints(),
+                            padding: EdgeInsets.zero,
+                          ),
+                        ],
                       ),
+                      const SizedBox(height: 8),
                       Text(
                         report.createdAt.split(' ').first,
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 10,
                           color: theme.hintColor,
                         ),
                       ),

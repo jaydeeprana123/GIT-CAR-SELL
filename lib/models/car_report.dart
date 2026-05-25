@@ -89,6 +89,15 @@ class CarReport {
   final String bonnetInside;
   final String bonnetOutside;
   
+  // Sold status fields
+  final String status; // 'unsold' or 'sold'
+  final String? customerName;
+  final String? customerMobile;
+  final String? customerAddress;
+  final String? soldPrice;
+  final String? soldDate;
+  final String? remarks;
+
   // Meta
   final String createdAt;
   
@@ -133,6 +142,13 @@ class CarReport {
     required this.fenderPassenger,
     required this.bonnetInside,
     required this.bonnetOutside,
+    this.status = 'unsold',
+    this.customerName,
+    this.customerMobile,
+    this.customerAddress,
+    this.soldPrice,
+    this.soldDate,
+    this.remarks,
     required this.createdAt,
     this.images = const [],
   });
@@ -175,6 +191,13 @@ class CarReport {
     String? fenderPassenger,
     String? bonnetInside,
     String? bonnetOutside,
+    String? status,
+    String? customerName,
+    String? customerMobile,
+    String? customerAddress,
+    String? soldPrice,
+    String? soldDate,
+    String? remarks,
     String? createdAt,
     List<ReportImage>? images,
   }) {
@@ -216,6 +239,13 @@ class CarReport {
       fenderPassenger: fenderPassenger ?? this.fenderPassenger,
       bonnetInside: bonnetInside ?? this.bonnetInside,
       bonnetOutside: bonnetOutside ?? this.bonnetOutside,
+      status: status ?? this.status,
+      customerName: customerName ?? this.customerName,
+      customerMobile: customerMobile ?? this.customerMobile,
+      customerAddress: customerAddress ?? this.customerAddress,
+      soldPrice: soldPrice ?? this.soldPrice,
+      soldDate: soldDate ?? this.soldDate,
+      remarks: remarks ?? this.remarks,
       createdAt: createdAt ?? this.createdAt,
       images: images ?? this.images,
     );
@@ -260,6 +290,13 @@ class CarReport {
       'fender_passenger': fenderPassenger,
       'bonnet_inside': bonnetInside,
       'bonnet_outside': bonnetOutside,
+      'status': status,
+      'customer_name': customerName,
+      'customer_mobile': customerMobile,
+      'customer_address': customerAddress,
+      'sold_price': soldPrice,
+      'sold_date': soldDate,
+      'remarks': remarks,
       'created_at': createdAt,
     };
   }
@@ -303,6 +340,13 @@ class CarReport {
       fenderPassenger: map['fender_passenger'] as String? ?? '',
       bonnetInside: map['bonnet_inside'] as String? ?? '',
       bonnetOutside: map['bonnet_outside'] as String? ?? '',
+      status: map['status'] as String? ?? 'unsold',
+      customerName: map['customer_name'] as String?,
+      customerMobile: map['customer_mobile'] as String?,
+      customerAddress: map['customer_address'] as String?,
+      soldPrice: map['sold_price'] as String?,
+      soldDate: map['sold_date'] as String?,
+      remarks: map['remarks'] as String?,
       createdAt: map['created_at'] as String? ?? '',
       images: images,
     );

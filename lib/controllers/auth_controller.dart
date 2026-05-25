@@ -150,6 +150,7 @@ class AuthController extends GetxController {
         role: userDoc.role,
         companyId: companyDoc.companyId,
         companyName: companyDoc.companyName,
+        purchaseScheme: companyDoc.purchaseScheme,
       );
 
       Get.offAll(() => const HomePage());
@@ -249,12 +250,14 @@ class AuthController extends GetxController {
     required String role,
     required String companyId,
     required String companyName,
+    String purchaseScheme = 'offline',
   }) async {
     final nowStr = DateTime.now().toIso8601String();
     await _dbHelper.saveSetting('lastVerifiedDate', nowStr);
     await _dbHelper.saveSetting('userRole', role);
     await _dbHelper.saveSetting('companyId', companyId);
     await _dbHelper.saveSetting('companyName', companyName);
+    await _dbHelper.saveSetting('purchaseScheme', purchaseScheme);
 
     localRole.value = role;
     localCompanyId.value = companyId;
@@ -268,6 +271,7 @@ class AuthController extends GetxController {
     await _dbHelper.deleteSetting('userRole');
     await _dbHelper.deleteSetting('companyId');
     await _dbHelper.deleteSetting('companyName');
+    await _dbHelper.deleteSetting('purchaseScheme');
 
     localRole.value = '';
     localCompanyId.value = '';

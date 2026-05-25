@@ -22,7 +22,7 @@ class DbHelper {
 
     return await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: _onCreate,
       onConfigure: _onConfigure,
       onUpgrade: _onUpgrade,
@@ -46,6 +46,15 @@ class DbHelper {
           value TEXT
         )
       ''');
+    }
+    if (oldVersion < 4) {
+      await db.execute("ALTER TABLE car_reports ADD COLUMN status TEXT DEFAULT 'unsold'");
+      await db.execute("ALTER TABLE car_reports ADD COLUMN customer_name TEXT");
+      await db.execute("ALTER TABLE car_reports ADD COLUMN customer_mobile TEXT");
+      await db.execute("ALTER TABLE car_reports ADD COLUMN customer_address TEXT");
+      await db.execute("ALTER TABLE car_reports ADD COLUMN sold_price TEXT");
+      await db.execute("ALTER TABLE car_reports ADD COLUMN sold_date TEXT");
+      await db.execute("ALTER TABLE car_reports ADD COLUMN remarks TEXT");
     }
   }
 
@@ -89,6 +98,13 @@ class DbHelper {
         fender_passenger TEXT,
         bonnet_inside TEXT,
         bonnet_outside TEXT,
+        status TEXT DEFAULT 'unsold',
+        customer_name TEXT,
+        customer_mobile TEXT,
+        customer_address TEXT,
+        sold_price TEXT,
+        sold_date TEXT,
+        remarks TEXT,
         created_at TEXT
       )
     ''');
@@ -157,6 +173,41 @@ class DbHelper {
     for (final map in maps) {
       final reportId = map['id'] as int;
       // Get images for this report
+      final imgMaps = await db.query(
+        'report_images',
+        where: 'report_id = ?',
+        whereArgs: [reportId],
+      );
+      final images = imgMaps.map((e) => ReportImage.fromMap(e)).toList();
+      reports.add(CarReport.fromMap(map, images: images));
+    }
+    return reports;
+  }
+
+  // Get reports by status (unsold or sold), filtered by query
+  Future<List<CarReport>> getReportsByStatus({required String status, String? query}) async {
+    final db = await database;
+    
+    List<Map<String, dynamic>> maps;
+    if (query != null && query.isNotEmpty) {
+      maps = await db.query(
+        'car_reports',
+        where: 'status = ? AND (model LIKE ? OR owner LIKE ?)',
+        whereArgs: [status, '%$query%', '%$query%'],
+        orderBy: 'id DESC',
+      );
+    } else {
+      maps = await db.query(
+        'car_reports',
+        where: 'status = ?',
+        whereArgs: [status],
+        orderBy: 'id DESC',
+      );
+    }
+
+    final List<CarReport> reports = [];
+    for (final map in maps) {
+      final reportId = map['id'] as int;
       final imgMaps = await db.query(
         'report_images',
         where: 'report_id = ?',

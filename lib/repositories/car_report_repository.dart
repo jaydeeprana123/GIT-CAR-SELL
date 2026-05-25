@@ -11,6 +11,11 @@ class CarReportRepository {
     return _dbHelper.getAllReports(query: query);
   }
 
+  /// Retrieve reports by status, optionally filtered by query.
+  Future<List<CarReport>> getReportsByStatus({required String status, String? query}) {
+    return _dbHelper.getReportsByStatus(status: status, query: query);
+  }
+
   /// Retrieve a specific report by its ID.
   Future<CarReport?> getReportById(int id) {
     return _dbHelper.getReportById(id);
