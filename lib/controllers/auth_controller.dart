@@ -107,6 +107,12 @@ class AuthController extends GetxController {
         return;
       }
 
+      if (!userDoc.isActive) {
+        errorMessage.value = 'આ યુઝર એકાઉન્ટ નિષ્ક્રિય છે. કૃપા કરીને એડમિનનો સંપર્ક કરો.';
+        await logout();
+        return;
+      }
+
       currentUserModel.value = userDoc;
 
       // Check user role
@@ -151,6 +157,7 @@ class AuthController extends GetxController {
         companyId: companyDoc.companyId,
         companyName: companyDoc.companyName,
         purchaseScheme: companyDoc.purchaseScheme,
+        isActive: userDoc.isActive,
       );
 
       Get.offAll(() => const HomePage());
@@ -167,6 +174,13 @@ class AuthController extends GetxController {
     final role = await _dbHelper.getSetting('userRole') ?? 'Staff User';
     final companyId = await _dbHelper.getSetting('companyId') ?? '';
     final companyName = await _dbHelper.getSetting('companyName') ?? '';
+    final isActiveStr = await _dbHelper.getSetting('userActive') ?? 'true';
+
+    if (isActiveStr == 'false') {
+      errorMessage.value = 'આ યુઝર એકાઉન્ટ નિષ્ક્રિય છે. કૃપા કરીને એડમિનનો સંપર્ક કરો.';
+      await logout();
+      return;
+    }
 
     if (lastVerifiedStr == null) {
       // Never verified online
@@ -251,6 +265,7 @@ class AuthController extends GetxController {
     required String companyId,
     required String companyName,
     String purchaseScheme = 'offline',
+    bool isActive = true,
   }) async {
     final nowStr = DateTime.now().toIso8601String();
     await _dbHelper.saveSetting('lastVerifiedDate', nowStr);
@@ -258,6 +273,7 @@ class AuthController extends GetxController {
     await _dbHelper.saveSetting('companyId', companyId);
     await _dbHelper.saveSetting('companyName', companyName);
     await _dbHelper.saveSetting('purchaseScheme', purchaseScheme);
+    await _dbHelper.saveSetting('userActive', isActive ? 'true' : 'false');
 
     localRole.value = role;
     localCompanyId.value = companyId;
@@ -272,6 +288,7 @@ class AuthController extends GetxController {
     await _dbHelper.deleteSetting('companyId');
     await _dbHelper.deleteSetting('companyName');
     await _dbHelper.deleteSetting('purchaseScheme');
+    await _dbHelper.deleteSetting('userActive');
 
     localRole.value = '';
     localCompanyId.value = '';

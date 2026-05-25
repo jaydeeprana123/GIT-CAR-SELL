@@ -6,6 +6,7 @@ import '../models/car_report.dart';
 import 'report_form_page.dart';
 import 'report_details_page.dart';
 import 'sold_car_form_dialog.dart';
+import 'settings_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,7 +22,9 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    final role = Get.find<AuthController>().localRole.value;
+    final isStaff = role == 'Staff User' || role == 'staff';
+    _tabController = TabController(length: isStaff ? 1 : 2, vsync: this);
     _tabController.addListener(() {
       // Re-trigger build to show correct floating action button on tab swap
       setState(() {});
@@ -359,8 +362,13 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final headerAccentColor = theme.brightness == Brightness.light
+        ? (theme.colorScheme.primary == const Color(0xFF000000) ? Colors.white : theme.colorScheme.secondary)
+        : (theme.colorScheme.secondary == const Color(0xFF0891B2) ? Colors.tealAccent : theme.colorScheme.primary);
     final controller = Get.find<CarReportController>();
     final authController = Get.find<AuthController>();
+    final role = authController.localRole.value;
+    final isStaff = role == 'Staff User' || role == 'staff';
     final TextEditingController searchController = TextEditingController(
       text: controller.searchQuery.value,
     );
@@ -466,9 +474,9 @@ class _HomePageState extends State<HomePage>
                                       role == 'Company Admin'
                                           ? 'એડમિન'
                                           : 'સ્ટાફ',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 9,
-                                        color: Colors.tealAccent,
+                                        color: headerAccentColor,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -494,6 +502,16 @@ class _HomePageState extends State<HomePage>
                             }),
                           ],
                         ),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.settings_outlined,
+                          color: Colors.white,
+                        ),
+                        tooltip: 'સેટિંગ્સ',
+                        onPressed: () {
+                          Get.to(() => const SettingsPage());
+                        },
                       ),
                       IconButton(
                         icon: const Icon(
@@ -578,56 +596,63 @@ class _HomePageState extends State<HomePage>
                           vertical: 12,
                         ),
                       ),
-                    ),
                   ),
-                  const SizedBox(height: 14),
-
-                  // Integrated tab navigation bar
-                  TabBar(
-                    controller: _tabController,
-                    indicatorColor: Colors.tealAccent,
-                    indicatorWeight: 3.5,
-                    labelColor: Colors.white,
-                    unselectedLabelColor: Colors.white.withOpacity(0.55),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    labelStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                      letterSpacing: 0.2,
-                    ),
-                    unselectedLabelStyle: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 13,
-                    ),
-                    tabs: const [
-                      Tab(
-                        icon: Icon(Icons.directions_car_outlined, size: 18),
-                        text: 'ઉપલબ્ધ કાર (Unsold)',
-                      ),
-                      Tab(
-                        icon: Icon(Icons.check_circle_outline, size: 18),
-                        text: 'વેચેલી કાર (Sold)',
-                      ),
-                    ],
                   ),
+                  if (!isStaff) ...[
+                    const SizedBox(height: 14),
+                    // Integrated tab navigation bar
+                    TabBar(
+                      controller: _tabController,
+                      indicatorColor: headerAccentColor,
+                      indicatorWeight: 3.5,
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.white.withOpacity(0.55),
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      labelStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                        letterSpacing: 0.2,
+                      ),
+                      unselectedLabelStyle: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 13,
+                      ),
+                      tabs: const [
+                        Tab(
+                          icon: Icon(Icons.directions_car_outlined, size: 18),
+                          text: 'ઉપલબ્ધ કાર (Unsold)',
+                        ),
+                        Tab(
+                          icon: Icon(Icons.check_circle_outline, size: 18),
+                          text: 'વેચેલી કાર (Sold)',
+                        ),
+                      ],
+                    ),
+                  ] else ...[
+                    const SizedBox(height: 16),
+                  ],
                 ],
               ),
             ),
 
             // TabBarView Body contents
             Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildUnsoldTab(context, controller),
-                  _buildSoldTab(context, controller),
-                ],
-              ),
+              child: isStaff
+                  ? _buildUnsoldTab(context, controller)
+                  : TabBarView(
+                      controller: _tabController,
+                      children: [
+                        _buildUnsoldTab(context, controller),
+                        _buildSoldTab(context, controller),
+                      ],
+                    ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: isStaff
+          ? null
+          : FloatingActionButton.extended(
         onPressed: () async {
           if (_tabController.index == 0) {
             // New inspection form for unsold cars
@@ -843,6 +868,11 @@ class _HomePageState extends State<HomePage>
   }) {
     final theme = Theme.of(context);
     final photoCount = report.images.length;
+    final isStaff = Get.find<AuthController>().localRole.value == 'Staff User' ||
+        Get.find<AuthController>().localRole.value == 'staff';
+    final accentColor = theme.brightness == Brightness.light
+        ? theme.colorScheme.primary
+        : (theme.colorScheme.secondary == const Color(0xFF0891B2) ? Colors.tealAccent : theme.colorScheme.primary);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -851,8 +881,8 @@ class _HomePageState extends State<HomePage>
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: isSold
-              ? Colors.tealAccent.withOpacity(0.06)
-              : Colors.white.withOpacity(0.04),
+              ? accentColor.withOpacity(0.12)
+              : (theme.brightness == Brightness.light ? Colors.black.withOpacity(0.05) : Colors.white.withOpacity(0.04)),
         ),
         boxShadow: [
           BoxShadow(
@@ -890,14 +920,14 @@ class _HomePageState extends State<HomePage>
                     height: 50,
                     decoration: BoxDecoration(
                       color: isSold
-                          ? Colors.teal.withOpacity(0.15)
+                          ? accentColor.withOpacity(0.15)
                           : theme.colorScheme.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Icon(
                       isSold ? Icons.task_alt_rounded : Icons.directions_car,
                       color: isSold
-                          ? Colors.tealAccent
+                          ? accentColor
                           : theme.colorScheme.primary,
                       size: 26,
                     ),
@@ -928,16 +958,16 @@ class _HomePageState extends State<HomePage>
                           const SizedBox(height: 6),
                           Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.currency_rupee,
                                 size: 13,
-                                color: Colors.tealAccent,
+                                color: accentColor,
                               ),
                               Text(
                                 '${report.soldPrice ?? '0'}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.tealAccent,
+                                  color: accentColor,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -999,43 +1029,45 @@ class _HomePageState extends State<HomePage>
                               ),
                             ],
                           ),
-                          const SizedBox(height: 10),
-                          GestureDetector(
-                            onTap: () => _markAsSold(context, report),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.teal.withOpacity(0.12),
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: Colors.tealAccent.withOpacity(0.25),
-                                  width: 1,
+                          if (!isStaff) ...[
+                            const SizedBox(height: 10),
+                            GestureDetector(
+                              onTap: () => _markAsSold(context, report),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: accentColor.withOpacity(0.12),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: accentColor.withOpacity(0.25),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.sell_outlined,
+                                      size: 12,
+                                      color: accentColor,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'વેચેલ માર્ક કરો',
+                                      style: TextStyle(
+                                        color: accentColor,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: const [
-                                  Icon(
-                                    Icons.sell_outlined,
-                                    size: 12,
-                                    color: Colors.tealAccent,
-                                  ),
-                                  SizedBox(width: 6),
-                                  Text(
-                                    'વેચેલ માર્ક કરો',
-                                    style: TextStyle(
-                                      color: Colors.tealAccent,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ),
-                          ),
+                          ],
                         ],
                       ],
                     ),

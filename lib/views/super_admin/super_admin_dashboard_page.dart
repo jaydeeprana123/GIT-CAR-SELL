@@ -186,13 +186,13 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    _buildStatCard('કુલ કંપની', total.toString(), Colors.blueAccent, theme),
+                    _buildStatCard('કુલ કંપની', total.toString(), theme.brightness == Brightness.light ? Colors.blue.shade700 : Colors.blueAccent, theme),
                     const SizedBox(width: 8),
-                    _buildStatCard('સક્રિય', active.toString(), Colors.tealAccent, theme),
+                    _buildStatCard('સક્રિય', active.toString(), theme.brightness == Brightness.light ? Colors.teal.shade700 : Colors.tealAccent, theme),
                     const SizedBox(width: 8),
-                    _buildStatCard('સમાપ્ત', expired.toString(), Colors.redAccent, theme),
+                    _buildStatCard('સમાપ્ત', expired.toString(), theme.brightness == Brightness.light ? Colors.red.shade700 : Colors.redAccent, theme),
                     const SizedBox(width: 8),
-                    _buildStatCard('નિષ્ક્રિય', inactive.toString(), Colors.orangeAccent, theme),
+                    _buildStatCard('નિષ્ક્રિય', inactive.toString(), theme.brightness == Brightness.light ? Colors.orange.shade800 : Colors.orangeAccent, theme),
                   ],
                 ),
               ),
@@ -204,18 +204,34 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
                   decoration: BoxDecoration(
                     color: theme.cardColor,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white.withOpacity(0.08)),
+                    border: Border.all(
+                      color: theme.brightness == Brightness.light
+                          ? Colors.black.withOpacity(0.08)
+                          : Colors.white.withOpacity(0.08),
+                    ),
                   ),
                   child: TextField(
                     controller: _searchController,
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'કંપની નામ અથવા એડમિન સર્ચ કરો...',
-                      hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
-                      prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                      hintStyle: TextStyle(
+                        color: theme.brightness == Brightness.light
+                            ? Colors.black38
+                            : Colors.white.withOpacity(0.5),
+                      ),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: theme.brightness == Brightness.light ? Colors.black45 : Colors.grey,
+                      ),
                       suffixIcon: _searchQuery.isNotEmpty
                           ? IconButton(
-                              icon: const Icon(Icons.clear, color: Colors.grey),
+                              icon: Icon(
+                                Icons.clear,
+                                color: theme.brightness == Brightness.light ? Colors.black45 : Colors.grey,
+                              ),
                               onPressed: () {
                                 _searchController.clear();
                                 setState(() {
@@ -313,15 +329,24 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
   }
 
   Widget _buildEmptyState() {
+    final theme = Theme.of(context);
+    final isLight = theme.brightness == Brightness.light;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.business_rounded, size: 60, color: Colors.white.withOpacity(0.2)),
+          Icon(
+            Icons.business_rounded,
+            size: 60,
+            color: isLight ? Colors.black26 : Colors.white.withOpacity(0.2),
+          ),
           const SizedBox(height: 12),
           Text(
             'કોઈ કંપની મળી નથી',
-            style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.5)),
+            style: TextStyle(
+              fontSize: 16,
+              color: isLight ? Colors.black38 : Colors.white.withOpacity(0.5),
+            ),
           ),
         ],
       ),
@@ -330,11 +355,12 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
 
   Widget _buildCompanyCard(Company company, ThemeData theme) {
     final isExpired = company.subscriptionExpiryDate.isBefore(DateTime.now());
+    final isLight = theme.brightness == Brightness.light;
     final statusColor = !company.isActive
-        ? Colors.orangeAccent
+        ? (isLight ? Colors.orange.shade800 : Colors.orangeAccent)
         : isExpired
-            ? Colors.redAccent
-            : Colors.tealAccent;
+            ? (isLight ? Colors.red.shade700 : Colors.redAccent)
+            : (isLight ? Colors.teal.shade700 : Colors.tealAccent);
 
     final statusText = !company.isActive
         ? 'નિષ્ક્રિય'
@@ -422,14 +448,18 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
             DateFormat('dd-MM-yyyy').format(company.subscriptionExpiryDate), 
             Icons.event_busy, 
             theme,
-            valueColor: isExpired ? Colors.redAccent : Colors.tealAccent
+            valueColor: isExpired
+                ? (theme.brightness == Brightness.light ? Colors.red.shade700 : Colors.redAccent)
+                : (theme.brightness == Brightness.light ? Colors.teal.shade700 : Colors.tealAccent),
           ),
           _buildDetailRow(
             'પર્ચેઝ સ્કીમ (Purchase Scheme)', 
             company.purchaseScheme == 'online' ? 'ઓનલાઇન (Online)' : 'ઓફલાઇન (Offline)', 
             Icons.shopping_bag_outlined, 
             theme,
-            valueColor: company.purchaseScheme == 'online' ? Colors.cyanAccent : Colors.amberAccent,
+            valueColor: company.purchaseScheme == 'online'
+                ? (theme.brightness == Brightness.light ? Colors.cyan.shade800 : Colors.cyanAccent)
+                : (theme.brightness == Brightness.light ? Colors.amber.shade900 : Colors.amberAccent),
           ),
           
           const SizedBox(height: 12),
@@ -561,6 +591,7 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
   }
 
   Widget _buildDetailRow(String label, String value, IconData icon, ThemeData theme, {Color? valueColor}) {
+    final isLight = theme.brightness == Brightness.light;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Row(
@@ -569,7 +600,10 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
           const SizedBox(width: 8),
           Text(
             '$label: ',
-            style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.6)),
+            style: TextStyle(
+              fontSize: 13,
+              color: isLight ? Colors.black54 : Colors.white.withOpacity(0.6),
+            ),
           ),
           Expanded(
             child: Text(
@@ -577,7 +611,7 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
               style: TextStyle(
                 fontSize: 13, 
                 fontWeight: FontWeight.w600,
-                color: valueColor ?? Colors.white
+                color: valueColor ?? (isLight ? Colors.black87 : Colors.white),
               ),
             ),
           ),

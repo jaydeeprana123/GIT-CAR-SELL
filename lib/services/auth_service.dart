@@ -150,4 +150,96 @@ class AuthService {
       return snapshot.docs.map((doc) => Company.fromMap(doc.data(), doc.id)).toList();
     });
   }
+
+  // Register a new staff user
+  Future<void> registerStaff({
+    required String name,
+    required String mobile,
+    required String email,
+    required String password,
+    required String companyId,
+  }) async {
+    // 1. Check if email already exists
+    final emailQuery = await _firestore.collection('users').where('email', isEqualTo: email).get();
+    if (emailQuery.docs.isNotEmpty) {
+      throw Exception('આ ઇમેઇલ સાથેનો યુઝર પહેલેથી નોંધાયેલ છે.');
+    }
+
+    // 2. Create secondary Firebase App
+    FirebaseApp tempApp = await Firebase.initializeApp(
+      name: 'TempStaffApp_${DateTime.now().millisecondsSinceEpoch}',
+      options: Firebase.app().options,
+    );
+
+    try {
+      final userCred = await FirebaseAuth.instanceFor(app: tempApp)
+          .createUserWithEmailAndPassword(email: email, password: password);
+      final uid = userCred.user!.uid;
+
+      // 3. Save to Firestore users collection
+      await _firestore.collection('users').doc(uid).set({
+        'uid': uid,
+        'email': email,
+        'role': 'staff',
+        'companyId': companyId,
+        'staffName': name,
+        'mobileNumber': mobile,
+        'password': password,
+        'isActive': true,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    } finally {
+      await tempApp.delete();
+    }
+  }
+
+  // Update staff password in Firebase Auth and Firestore
+  Future<void> updateStaffPassword({
+    required String uid,
+    required String email,
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    FirebaseApp tempApp = await Firebase.initializeApp(
+      name: 'TempStaffReset_${DateTime.now().millisecondsSinceEpoch}',
+      options: Firebase.app().options,
+    );
+
+    try {
+      final authInstance = FirebaseAuth.instanceFor(app: tempApp);
+      // Sign in as staff using stored old password
+      final userCred = await authInstance.signInWithEmailAndPassword(
+        email: email,
+        password: oldPassword,
+      );
+      // Update password in Firebase Auth
+      await userCred.user!.updatePassword(newPassword);
+      
+      // Update Firestore user document
+      await _firestore.collection('users').doc(uid).update({
+        'password': newPassword,
+      });
+    } finally {
+      await tempApp.delete();
+    }
+  }
+
+  // Toggle staff active status in Firestore
+  Future<void> toggleStaffActiveStatus(String uid, bool isActive) async {
+    await _firestore.collection('users').doc(uid).update({
+      'isActive': isActive,
+    });
+  }
+
+  // Update staff details in Firestore
+  Future<void> updateStaffDetails({
+    required String uid,
+    required String name,
+    required String mobile,
+  }) async {
+    await _firestore.collection('users').doc(uid).update({
+      'staffName': name,
+      'mobileNumber': mobile,
+    });
+  }
 }
