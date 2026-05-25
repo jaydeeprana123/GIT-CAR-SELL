@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1033804538634",
+    "project_id": "motexacarseller",
+    "storage_bucket": "motexacarseller.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033804538634:android:f1093cf0223820e94050f3",
+        "android_client_info": {
+          "package_name": "com.innies.car_sell"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB25bRn1ksHAe82COquhohK5its7yeKQII"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
