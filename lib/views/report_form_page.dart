@@ -330,6 +330,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(isEditMode ? 'રિપોર્ટ સુધારો' : 'નવું ઇન્સ્પેક્શન'),
@@ -337,7 +338,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
           if (_currentStep == _totalSteps - 1)
             TextButton(
               onPressed: _saveReport,
-              child: Text(isEditMode ? 'સુધારો' : 'સાચવો', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+              child: Text(isEditMode ? 'સુધારો' : 'સાચવો', style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 16)),
             ),
         ],
       ),

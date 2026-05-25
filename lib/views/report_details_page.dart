@@ -484,11 +484,11 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
         title: Text(report.model),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit_outlined, color: Colors.white),
+            icon: const Icon(Icons.edit_outlined),
             onPressed: _editReport,
           ),
           IconButton(
-            icon: const Icon(Icons.delete_outline, color: Colors.white),
+            icon: const Icon(Icons.delete_outline),
             onPressed: _deleteReport,
           ),
         ],
@@ -647,6 +647,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
     final mobile = report.ownerMobile.isEmpty ? 'નથી ભરેલ' : report.ownerMobile;
 
     return Card(
+      color: theme.cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 2,
       child: Padding(
@@ -830,6 +831,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
   }) {
     final theme = Theme.of(context);
     return Card(
+      color: theme.cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 2,
       child: ExpansionTile(
