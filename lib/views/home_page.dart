@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/car_report_controller.dart';
+import '../controllers/auth_controller.dart';
 import '../models/car_report.dart';
 import 'report_form_page.dart';
 import 'report_details_page.dart';
@@ -42,6 +43,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = Get.find<CarReportController>();
+    final authController = Get.find<AuthController>();
     final TextEditingController searchController = TextEditingController(text: controller.searchQuery.value);
 
     // Keep search field controller synced with the GetX reactive search query
@@ -108,25 +110,82 @@ class HomePage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Motexa',
-                              style: TextStyle(
-                                fontSize: 26,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                letterSpacing: 0.8,
-                              ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'Motexa',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    letterSpacing: 0.8,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Obx(() {
+                                  final role = authController.localRole.value;
+                                  if (role.isEmpty) return const SizedBox.shrink();
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.25),
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(color: Colors.white.withOpacity(0.15)),
+                                    ),
+                                    child: Text(
+                                      role == 'Company Admin' ? 'એડમિન' : 'સ્ટાફ',
+                                      style: const TextStyle(
+                                        fontSize: 9, 
+                                        color: Colors.tealAccent, 
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              ],
                             ),
-                            Text(
-                              'સેકન્ડ હેન્ડ ગાડી સેલ અને ઇન્સ્પેક્શન',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.white.withOpacity(0.9),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                            Obx(() {
+                              final compName = authController.localCompanyName.value;
+                              return Text(
+                                compName.isNotEmpty ? compName : 'સેકન્ડ હેન્ડ ગાડી સેલ અને ઇન્સ્પેક્શન',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white.withOpacity(0.85),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              );
+                            }),
                           ],
                         ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.logout_rounded, color: Colors.white),
+                        tooltip: 'લૉગ આઉટ',
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('લૉગ આઉટ?'),
+                              content: const Text('શું તમે ખરેખર લૉગ આઉટ કરવા માંગો છો?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('ના', style: TextStyle(color: Colors.grey)),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    authController.logout();
+                                  },
+                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+                                  child: const Text('હા', style: TextStyle(color: Colors.white)),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),

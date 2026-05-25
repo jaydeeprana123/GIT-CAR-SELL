@@ -22,7 +22,7 @@ class DbHelper {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _onCreate,
       onConfigure: _onConfigure,
       onUpgrade: _onUpgrade,
@@ -38,6 +38,14 @@ class DbHelper {
     if (oldVersion < 2) {
       await db.execute('ALTER TABLE car_reports ADD COLUMN owner_name TEXT');
       await db.execute('ALTER TABLE car_reports ADD COLUMN owner_mobile TEXT');
+    }
+    if (oldVersion < 3) {
+      await db.execute('''
+        CREATE TABLE app_settings (
+          key TEXT PRIMARY KEY,
+          value TEXT
+        )
+      ''');
     }
   }
 
@@ -92,6 +100,13 @@ class DbHelper {
         image_path TEXT,
         label TEXT,
         FOREIGN KEY (report_id) REFERENCES car_reports (id) ON DELETE CASCADE
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE app_settings (
+        key TEXT PRIMARY KEY,
+        value TEXT
       )
     ''');
   }
@@ -215,5 +230,35 @@ class DbHelper {
         );
       }
     });
+  }
+
+  // App settings helpers
+  Future<void> saveSetting(String key, String value) async {
+    final db = await database;
+    await db.insert(
+      'app_settings',
+      {'key': key, 'value': value},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<String?> getSetting(String key) async {
+    final db = await database;
+    final maps = await db.query(
+      'app_settings',
+      where: 'key = ?',
+      whereArgs: [key],
+    );
+    if (maps.isEmpty) return null;
+    return maps.first['value'] as String?;
+  }
+
+  Future<void> deleteSetting(String key) async {
+    final db = await database;
+    await db.delete(
+      'app_settings',
+      where: 'key = ?',
+      whereArgs: [key],
+    );
   }
 }

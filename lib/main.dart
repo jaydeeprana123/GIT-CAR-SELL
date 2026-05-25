@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'repositories/car_report_repository.dart';
 import 'controllers/car_report_controller.dart';
+import 'controllers/auth_controller.dart';
 import 'views/home_page.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    Get.log('Firebase initialization error: $e');
+  }
   runApp(const CarInspectionApp());
 }
 
@@ -17,6 +24,7 @@ class CarInspectionApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Motexa',
       initialBinding: BindingsBuilder(() {
+        Get.put(AuthController());
         Get.put(CarReportController(repository: CarReportRepository()));
       }),
       debugShowCheckedModeBanner: false,
@@ -85,7 +93,88 @@ class CarInspectionApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const HomePage(),
+      home: const SplashPage(),
+    );
+  }
+}
+
+class SplashPage extends StatelessWidget {
+  const SplashPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              theme.colorScheme.background,
+              const Color(0xFF020617), // Deepest dark
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 110,
+                height: 110,
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(32),
+                  border: Border.all(
+                    color: theme.colorScheme.primary.withOpacity(0.3),
+                    width: 2,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: theme.colorScheme.primary.withOpacity(0.2),
+                      blurRadius: 30,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/motexa_logo.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 28),
+              const Text(
+                'Motexa',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'સેકન્ડ હેન્ડ ગાડી સેલ અને ઇન્સ્પેક્શન',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white.withOpacity(0.6),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 48),
+              SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
