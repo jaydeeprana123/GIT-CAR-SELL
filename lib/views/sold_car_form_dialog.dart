@@ -139,6 +139,7 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isManual = widget.car == null;
+    final isLight = theme.brightness == Brightness.light;
 
     return Container(
       padding: EdgeInsets.only(
@@ -148,7 +149,7 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
         bottom: MediaQuery.of(context).viewInsets.bottom + 24,
       ),
       decoration: BoxDecoration(
-        color: theme.dialogTheme.backgroundColor ?? const Color(0xFF1E293B),
+        color: theme.colorScheme.surface,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(28),
           topRight: Radius.circular(28),
@@ -166,19 +167,19 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                 children: [
                   Text(
                     isManual ? 'નવી વેચેલી કાર ઉમેરો' : 'વેચેલ માર્ક કરો',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: isLight ? Colors.black87 : Colors.white,
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, color: Colors.grey),
+                    icon: Icon(Icons.close, color: isLight ? Colors.black54 : Colors.grey),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),
-              const Divider(color: Color(0xFF334155), height: 16),
+              Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
               
               if (isManual) ...[
                 const Text(
@@ -188,8 +189,8 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _modelController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: _buildInputDecoration('મોડેલ નામ', Icons.directions_car, theme),
+                  style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
+                  decoration: _buildInputDecoration('મોડેલ નામ', Icons.directions_car, theme, isLight),
                   validator: (value) => value!.trim().isEmpty ? 'ગાડીનું મોડેલ દાખલ કરો' : null,
                 ),
                 const SizedBox(height: 12),
@@ -198,8 +199,8 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                     Expanded(
                       child: TextFormField(
                         controller: _ownerController,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: _buildInputDecoration('ઓનર (દા.ત. 1, 2)', Icons.numbers, theme),
+                        style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
+                        decoration: _buildInputDecoration('ઓનર (દા.ત. 1, 2)', Icons.numbers, theme, isLight),
                         validator: (value) => value!.trim().isEmpty ? 'ઓનર દાખલ કરો' : null,
                       ),
                     ),
@@ -208,8 +209,8 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                       child: TextFormField(
                         controller: _kilometersController,
                         keyboardType: TextInputType.number,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: _buildInputDecoration('કિલોમીટર', Icons.speed, theme),
+                        style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
+                        decoration: _buildInputDecoration('કિલોમીટર', Icons.speed, theme, isLight),
                         validator: (value) => value!.trim().isEmpty ? 'કિલોમીટર દાખલ કરો' : null,
                       ),
                     ),
@@ -221,8 +222,8 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                     Expanded(
                       child: TextFormField(
                         controller: _ownerNameController,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: _buildInputDecoration('ઓનરનું નામ (વૈકલ્પિક)', Icons.person_outline, theme),
+                        style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
+                        decoration: _buildInputDecoration('ઓનરનું નામ (વૈકલ્પિક)', Icons.person_outline, theme, isLight),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -230,8 +231,8 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                       child: TextFormField(
                         controller: _ownerMobileController,
                         keyboardType: TextInputType.phone,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: _buildInputDecoration('મોબાઇલ (વૈકલ્પિક)', Icons.phone, theme),
+                        style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
+                        decoration: _buildInputDecoration('મોબાઇલ (વૈકલ્પિક)', Icons.phone, theme, isLight),
                       ),
                     ),
                   ],
@@ -242,8 +243,9 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.2),
+                    color: isLight ? Colors.grey.withOpacity(0.08) : Colors.black.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: isLight ? Colors.black.withOpacity(0.04) : Colors.white.withOpacity(0.04)),
                   ),
                   child: Row(
                     children: [
@@ -255,11 +257,18 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                           children: [
                             Text(
                               widget.car!.model,
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold, 
+                                fontSize: 15,
+                                color: isLight ? Colors.black87 : Colors.white,
+                              ),
                             ),
                             Text(
                               'ઓનર: ${widget.car!.owner} | કિલોમીટર: ${widget.car!.kilometers} km',
-                              style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.6)),
+                              style: TextStyle(
+                                fontSize: 12, 
+                                color: isLight ? Colors.black54 : Colors.white.withOpacity(0.6),
+                              ),
                             ),
                           ],
                         ),
@@ -279,8 +288,8 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
               // Customer Name
               TextFormField(
                 controller: _customerNameController,
-                style: const TextStyle(color: Colors.white),
-                decoration: _buildInputDecoration('ગ્રાહકનું નામ', Icons.person, theme),
+                style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
+                decoration: _buildInputDecoration('ગ્રાહકનું નામ', Icons.person, theme, isLight),
                 validator: (value) => value!.trim().isEmpty ? 'ગ્રાહકનું નામ દાખલ કરો' : null,
               ),
               const SizedBox(height: 12),
@@ -292,8 +301,8 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                     child: TextFormField(
                       controller: _mobileNumberController,
                       keyboardType: TextInputType.phone,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: _buildInputDecoration('મોબાઇલ નંબર', Icons.phone_iphone, theme),
+                      style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
+                      decoration: _buildInputDecoration('મોબાઇલ નંબર', Icons.phone_iphone, theme, isLight),
                       validator: (value) {
                         if (value!.trim().isEmpty) return 'નંબર દાખલ કરો';
                         if (value.trim().length < 10) return 'યોગ્ય નંબર દાખલ કરો';
@@ -306,8 +315,8 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                     child: TextFormField(
                       controller: _soldPriceController,
                       keyboardType: TextInputType.number,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: _buildInputDecoration('વેચાણ કિંમત (રૂ.)', Icons.currency_rupee, theme),
+                      style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
+                      decoration: _buildInputDecoration('વેચાણ કિંમત (રૂ.)', Icons.currency_rupee, theme, isLight),
                       validator: (value) => value!.trim().isEmpty ? 'કિંમત દાખલ કરો' : null,
                     ),
                   ),
@@ -319,8 +328,8 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
               TextFormField(
                 controller: _addressController,
                 maxLines: 2,
-                style: const TextStyle(color: Colors.white),
-                decoration: _buildInputDecoration('સરનામું', Icons.location_on_outlined, theme),
+                style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
+                decoration: _buildInputDecoration('સરનામું', Icons.location_on_outlined, theme, isLight),
                 validator: (value) => value!.trim().isEmpty ? 'ગ્રાહકનું સરનામું દાખલ કરો' : null,
               ),
               const SizedBox(height: 12),
@@ -337,9 +346,9 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.2),
+                    color: isLight ? Colors.grey.withOpacity(0.08) : Colors.black.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white.withOpacity(0.08)),
+                    border: Border.all(color: isLight ? Colors.black.withOpacity(0.04) : Colors.white.withOpacity(0.08)),
                   ),
                   child: Row(
                     children: [
@@ -348,7 +357,11 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                       Expanded(
                         child: Text(
                           DateFormat('dd-MM-yyyy').format(_soldDate),
-                          style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                          style: TextStyle(
+                            color: isLight ? Colors.black87 : Colors.white, 
+                            fontSize: 14, 
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                       const Icon(Icons.arrow_drop_down, color: Colors.grey, size: 20),
@@ -362,8 +375,8 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
               TextFormField(
                 controller: _remarksController,
                 maxLines: 2,
-                style: const TextStyle(color: Colors.white),
-                decoration: _buildInputDecoration('રિમાર્ક્સ / નોંધ (વૈકલ્પિક)', Icons.note_alt_outlined, theme),
+                style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
+                decoration: _buildInputDecoration('રિમાર્ક્સ / નોંધ (વૈકલ્પિક)', Icons.note_alt_outlined, theme, isLight),
               ),
               
               const SizedBox(height: 24),
@@ -397,14 +410,19 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
     );
   }
 
-  InputDecoration _buildInputDecoration(String label, IconData icon, ThemeData theme) {
+  InputDecoration _buildInputDecoration(String label, IconData icon, ThemeData theme, bool isLight) {
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 13),
+      labelStyle: TextStyle(
+        color: isLight ? Colors.black54 : Colors.white.withOpacity(0.6), 
+        fontSize: 13,
+      ),
       prefixIcon: Icon(icon, color: theme.colorScheme.primary, size: 20),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(color: Colors.white.withOpacity(0.08)),
+        borderSide: BorderSide(
+          color: isLight ? Colors.black.withOpacity(0.08) : Colors.white.withOpacity(0.08),
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -419,7 +437,7 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
         borderSide: const BorderSide(color: Colors.redAccent, width: 1.2),
       ),
       filled: true,
-      fillColor: Colors.black.withOpacity(0.1),
+      fillColor: isLight ? Colors.black.withOpacity(0.03) : Colors.black.withOpacity(0.1),
       contentPadding: const EdgeInsets.symmetric(vertical: 12),
     );
   }

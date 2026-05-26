@@ -705,7 +705,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
-                          color: report.ownerMobile.isEmpty ? Colors.black : theme.colorScheme.primary,
+                          color: report.ownerMobile.isEmpty ? theme.hintColor : theme.colorScheme.primary,
                           decoration: report.ownerMobile.isEmpty ? null : TextDecoration.underline,
                         ),
                       ),

@@ -89,12 +89,13 @@ class _HomePageState extends State<HomePage>
   }
 
   void _showSoldCarDetailsSheet(BuildContext context, CarReport report) {
-    final theme = Theme.of(context);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
+        final theme = Theme.of(context);
+        final isLight = theme.brightness == Brightness.light;
         return Container(
           padding: EdgeInsets.only(
             top: 16,
@@ -103,14 +104,14 @@ class _HomePageState extends State<HomePage>
             bottom: MediaQuery.of(context).padding.bottom + 24,
           ),
           decoration: BoxDecoration(
-            color: theme.dialogTheme.backgroundColor ?? const Color(0xFF1E293B),
+            color: theme.colorScheme.surface,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(30),
               topRight: Radius.circular(30),
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withOpacity(isLight ? 0.1 : 0.5),
                 blurRadius: 20,
                 offset: const Offset(0, -5),
               ),
@@ -128,7 +129,7 @@ class _HomePageState extends State<HomePage>
                     height: 4.5,
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.15),
+                      color: isLight ? Colors.black.withOpacity(0.15) : Colors.white.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -146,32 +147,32 @@ class _HomePageState extends State<HomePage>
                             color: Colors.teal.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.task_alt_rounded,
-                            color: Colors.tealAccent,
+                            color: isLight ? Colors.teal.shade700 : Colors.tealAccent,
                             size: 24,
                           ),
                         ),
                         const SizedBox(width: 12),
-                        const Text(
+                        Text(
                           'વેચેલી કારની વિગતો',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: isLight ? Colors.black87 : Colors.white,
                             letterSpacing: 0.5,
                           ),
                         ),
                       ],
                     ),
                     IconButton(
-                      icon: const Icon(Icons.close, color: Colors.grey),
+                      icon: Icon(Icons.close, color: isLight ? Colors.black54 : Colors.grey),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],
                 ),
-                const Divider(
-                  color: Color(0xFF334155),
+                Divider(
+                  color: isLight ? theme.dividerColor : const Color(0xFF334155),
                   height: 24,
                   thickness: 1,
                 ),
@@ -202,9 +203,9 @@ class _HomePageState extends State<HomePage>
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.15),
+                    color: isLight ? Colors.grey.withOpacity(0.08) : Colors.black.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withOpacity(0.04)),
+                    border: Border.all(color: isLight ? Colors.black.withOpacity(0.04) : Colors.white.withOpacity(0.04)),
                   ),
                   child: Column(
                     children: [
@@ -212,18 +213,21 @@ class _HomePageState extends State<HomePage>
                         Icons.directions_car,
                         'મોડેલ (Model)',
                         report.model.isEmpty ? 'N/A' : report.model,
+                        isLight: isLight,
                       ),
-                      const Divider(color: Color(0xFF334155), height: 16),
+                      Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.person_outline,
                         'ઓનર (Owner)',
                         report.owner.isEmpty ? 'N/A' : report.owner,
+                        isLight: isLight,
                       ),
-                      const Divider(color: Color(0xFF334155), height: 16),
+                      Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.speed,
                         'કિલોમીટર (Kilometers)',
                         '${report.kilometers.isEmpty ? '0' : report.kilometers} km',
+                        isLight: isLight,
                       ),
                     ],
                   ),
@@ -233,18 +237,18 @@ class _HomePageState extends State<HomePage>
                 // Customer Details Section Header
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.badge_outlined,
                       size: 18,
-                      color: Colors.tealAccent,
+                      color: isLight ? Colors.teal.shade700 : Colors.tealAccent,
                     ),
                     const SizedBox(width: 8),
-                    const Text(
+                    Text(
                       'ગ્રાહકની સંપૂર્ણ વિગતો (Customer Details)',
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
-                        color: Colors.tealAccent,
+                        color: isLight ? Colors.teal.shade700 : Colors.tealAccent,
                         letterSpacing: 0.5,
                       ),
                     ),
@@ -256,9 +260,9 @@ class _HomePageState extends State<HomePage>
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.15),
+                    color: isLight ? Colors.grey.withOpacity(0.08) : Colors.black.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withOpacity(0.04)),
+                    border: Border.all(color: isLight ? Colors.black.withOpacity(0.04) : Colors.white.withOpacity(0.04)),
                   ),
                   child: Column(
                     children: [
@@ -266,41 +270,47 @@ class _HomePageState extends State<HomePage>
                         Icons.person,
                         'ગ્રાહકનું નામ (Customer Name)',
                         report.customerName ?? 'N/A',
+                        isLight: isLight,
                       ),
-                      const Divider(color: Color(0xFF334155), height: 16),
+                      Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.phone_iphone,
                         'મોબાઇલ નંબર (Mobile Number)',
                         report.customerMobile ?? 'N/A',
+                        isLight: isLight,
                       ),
-                      const Divider(color: Color(0xFF334155), height: 16),
+                      Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.location_on_outlined,
                         'સરનામું (Address)',
                         report.customerAddress ?? 'N/A',
+                        isLight: isLight,
                       ),
-                      const Divider(color: Color(0xFF334155), height: 16),
+                      Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.currency_rupee,
                         'વેચાણ કિંમત (Sold Price)',
                         report.soldPrice != null
                             ? '₹ ${report.soldPrice}'
                             : 'N/A',
-                        valueColor: Colors.tealAccent,
+                        valueColor: isLight ? Colors.teal.shade700 : Colors.tealAccent,
+                        isLight: isLight,
                       ),
-                      const Divider(color: Color(0xFF334155), height: 16),
+                      Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.calendar_today_outlined,
                         'વેચાણ તારીખ (Sold Date)',
                         report.soldDate ?? 'N/A',
+                        isLight: isLight,
                       ),
-                      const Divider(color: Color(0xFF334155), height: 16),
+                      Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.note_alt_outlined,
                         'રિમાર્ક્સ / નોંધ (Remarks)',
                         (report.remarks == null || report.remarks!.isEmpty)
                             ? 'કોઈ નોંધ નથી'
                             : report.remarks!,
+                        isLight: isLight,
                       ),
                     ],
                   ),
@@ -318,6 +328,7 @@ class _HomePageState extends State<HomePage>
     String label,
     String value, {
     Color? valueColor,
+    bool isLight = false,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,10 +336,10 @@ class _HomePageState extends State<HomePage>
         Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.03),
+            color: isLight ? Colors.black.withOpacity(0.04) : Colors.white.withOpacity(0.03),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon, size: 18, color: Colors.white70),
+          child: Icon(icon, size: 18, color: isLight ? Colors.black54 : Colors.white70),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -339,7 +350,7 @@ class _HomePageState extends State<HomePage>
                 label,
                 style: TextStyle(
                   fontSize: 11,
-                  color: Colors.white.withOpacity(0.4),
+                  color: isLight ? Colors.black54 : Colors.white.withOpacity(0.4),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -349,7 +360,7 @@ class _HomePageState extends State<HomePage>
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: valueColor ?? Colors.white,
+                  color: valueColor ?? (isLight ? Colors.black87 : Colors.white),
                 ),
               ),
             ],
