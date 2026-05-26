@@ -61,7 +61,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
       builder: (context) {
         final theme = Theme.of(context);
         return AlertDialog(
-          title: const Text('નવો સ્ટાફ ઉમેરો', style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text('નવો સ્ટાફ ઉમેરો'.tr, style: const TextStyle(fontWeight: FontWeight.bold)),
           content: SingleChildScrollView(
             child: Form(
               key: formKey,
@@ -71,7 +71,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
                   TextFormField(
                     controller: _nameController,
                     decoration: _buildInputDecoration('સ્ટાફ નામ', Icons.person, theme),
-                    validator: (v) => v!.trim().isEmpty ? 'સ્ટાફનું નામ દાખલ કરો' : null,
+                    validator: (v) => v!.trim().isEmpty ? 'સ્ટાફનું નામ દાખલ કરો'.tr : null,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
@@ -79,8 +79,8 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
                     keyboardType: TextInputType.phone,
                     decoration: _buildInputDecoration('મોબાઇલ નંબર', Icons.phone, theme),
                     validator: (v) {
-                      if (v!.trim().isEmpty) return 'મોબાઇલ નંબર દાખલ કરો';
-                      if (v.trim().length < 10) return 'યોગ્ય નંબર દાખલ કરો';
+                      if (v!.trim().isEmpty) return 'મોબાઇલ નંબર દાખલ કરો'.tr;
+                      if (v.trim().length < 10) return 'યોગ્ય નંબર દાખલ કરો'.tr;
                       return null;
                     },
                   ),
@@ -90,8 +90,8 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: _buildInputDecoration('ઇમેઇલ (યુઝરનેમ)', Icons.email, theme),
                     validator: (v) {
-                      if (v!.trim().isEmpty) return 'ઇમેઇલ દાખલ કરો';
-                      if (!v.contains('@')) return 'યોગ્ય ઇમેઇલ દાખલ કરો';
+                      if (v!.trim().isEmpty) return 'ઇમેઇલ દાખલ કરો'.tr;
+                      if (!v.contains('@')) return 'યોગ્ય ઇમેઇલ દાખલ કરો'.tr;
                       return null;
                     },
                   ),
@@ -100,7 +100,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
                     controller: _passwordController,
                     obscureText: true,
                     decoration: _buildInputDecoration('પાસવર્ડ', Icons.lock, theme),
-                    validator: (v) => v!.trim().length < 6 ? 'પાસવર્ડ ઓછામાં ઓછો ૬ અક્ષરનો હોવો જોઈએ' : null,
+                    validator: (v) => v!.trim().length < 6 ? 'પાસવર્ડ ઓછામાં ઓછો ૬ અક્ષરનો હોવો જોઈએ'.tr : null,
                   ),
                 ],
               ),
@@ -109,7 +109,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('રદ કરો', style: TextStyle(color: Colors.grey)),
+              child: Text('રદ કરો'.tr, style: const TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -118,7 +118,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
                 _registerStaffUser();
               },
               style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary),
-              child: const Text('ઉમેરો', style: TextStyle(color: Colors.white)),
+              child: Text('ઉમેરો'.tr, style: const TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -138,13 +138,13 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('સ્ટાફ યુઝર સફળતાપૂર્વક ઉમેરાયો છે.')),
+          SnackBar(content: Text('સ્ટાફ યુઝર સફળતાપૂર્વક ઉમેરાયો છે.'.tr)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('સ્ટાફ ઉમેરવામાં ભૂલ આવી: $e'), backgroundColor: Colors.redAccent),
+          SnackBar(content: Text('${'સ્ટાફ ઉમેરવામાં ભૂલ આવી:'.tr} $e'), backgroundColor: Colors.redAccent),
         );
       }
     } finally {
@@ -164,7 +164,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
       builder: (context) {
         final theme = Theme.of(context);
         return AlertDialog(
-          title: const Text('વિગતો સુધારો', style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text('વિગતો સુધારો'.tr, style: const TextStyle(fontWeight: FontWeight.bold)),
           content: Form(
             key: formKey,
             child: Column(
@@ -173,14 +173,14 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
                 TextFormField(
                   controller: _nameController,
                   decoration: _buildInputDecoration('સ્ટાફ નામ', Icons.person, theme),
-                  validator: (v) => v!.trim().isEmpty ? 'સ્ટાફનું નામ દાખલ કરો' : null,
+                  validator: (v) => v!.trim().isEmpty ? 'સ્ટાફનું નામ દાખલ કરો'.tr : null,
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _mobileController,
                   keyboardType: TextInputType.phone,
                   decoration: _buildInputDecoration('મોબાઇલ નંબર', Icons.phone, theme),
-                  validator: (v) => v!.trim().isEmpty ? 'મોબાઇલ નંબર દાખલ કરો' : null,
+                  validator: (v) => v!.trim().isEmpty ? 'મોબાઇલ નંબર દાખલ કરો'.tr : null,
                 ),
               ],
             ),
@@ -188,7 +188,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('રદ કરો', style: TextStyle(color: Colors.grey)),
+              child: Text('રદ કરો'.tr, style: const TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -197,7 +197,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
                 _updateStaffDetails(staff.uid);
               },
               style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary),
-              child: const Text('સાચવો', style: TextStyle(color: Colors.white)),
+              child: Text('સાચવો'.tr, style: const TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -215,13 +215,13 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('સ્ટાફ વિગતો સફળતાપૂર્વક અપડેટ કરાઈ.')),
+          SnackBar(content: Text('સ્ટાફ વિગતો સફળતાપૂર્વક અપડેટ કરાઈ.'.tr)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('અપડેટ કરવામાં ભૂલ આવી: $e'), backgroundColor: Colors.redAccent),
+          SnackBar(content: Text('${'અપડેટ કરવામાં ભૂલ આવી:'.tr} $e'), backgroundColor: Colors.redAccent),
         );
       }
     } finally {
@@ -239,14 +239,14 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
       builder: (context) {
         final theme = Theme.of(context);
         return AlertDialog(
-          title: const Text('પાસવર્ડ બદલો', style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text('પાસવર્ડ બદલો'.tr, style: const TextStyle(fontWeight: FontWeight.bold)),
           content: Form(
             key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'યુઝર: ${staff.email}',
+                  "${'યુઝર:'.tr} ${staff.email}",
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
                 const SizedBox(height: 12),
@@ -254,7 +254,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
                   controller: _passwordController,
                   obscureText: true,
                   decoration: _buildInputDecoration('નવો પાસવર્ડ', Icons.lock, theme),
-                  validator: (v) => v!.trim().length < 6 ? 'પાસવર્ડ ઓછામાં ઓછો ૬ અક્ષરનો હોવો જોઈએ' : null,
+                  validator: (v) => v!.trim().length < 6 ? 'પાસવર્ડ ઓછામાં ઓછો ૬ અક્ષરનો હોવો જોઈએ'.tr : null,
                 ),
               ],
             ),
@@ -262,7 +262,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('રદ કરો', style: TextStyle(color: Colors.grey)),
+              child: Text('રદ કરો'.tr, style: const TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -271,7 +271,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
                 _resetStaffPassword(staff);
               },
               style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary),
-              child: const Text('બદલો', style: TextStyle(color: Colors.white)),
+              child: Text('બદલો'.tr, style: const TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -287,7 +287,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
       final oldPassword = doc.data()?['password'] as String? ?? '';
 
       if (oldPassword.isEmpty) {
-        throw Exception('જુનો પાસવર્ડ ડેટાબેઝમાં મળ્યો નથી. પાસવર્ડ રીસેટ કરવા માટે કૃપા કરીને આ સ્ટાફને ડીલીટ કરી નવો બનાવો.');
+        throw Exception('જુનો પાસવર્ડ ડેટાબેઝમાં મળ્યો નથી. પાસવર્ડ રીસેટ કરવા માટે કૃપા કરીને આ સ્ટાફને ડીલીટ કરી નવો બનાવો.'.tr);
       }
 
       await _authService.updateStaffPassword(
@@ -298,13 +298,13 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('સ્ટાફ પાસવર્ડ સફળતાપૂર્વક બદલાઈ ગયો છે.')),
+          SnackBar(content: Text('સ્ટાફ પાસવર્ડ સફળતાપૂર્વક બદલાઈ ગયો છે.'.tr)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('પાસવર્ડ બદલવામાં ભૂલ આવી: $e'), backgroundColor: Colors.redAccent),
+          SnackBar(content: Text('${'પાસવર્ડ બદલવામાં ભૂલ આવી:'.tr} $e'), backgroundColor: Colors.redAccent),
         );
       }
     } finally {
@@ -320,14 +320,14 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(isActive ? 'સ્ટાફ સફળતાપૂર્વક સક્રિય કરાયો.' : 'સ્ટાફ સફળતાપૂર્વક નિષ્ક્રિય કરાયો.'),
+            content: Text(isActive ? 'સ્ટાફ સફળતાપૂર્વક સક્રિય કરાયો.'.tr : 'સ્ટાફ સફળતાપૂર્વક નિષ્ક્રિય કરાયો.'.tr),
           ),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('સ્ટેટસ બદલવામાં ભૂલ આવી: $e'), backgroundColor: Colors.redAccent),
+          SnackBar(content: Text('${'સ્ટેટસ બદલવામાં ભૂલ આવી:'.tr} $e'), backgroundColor: Colors.redAccent),
         );
       }
     } finally {
@@ -341,7 +341,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('સ્ટાફ મેનેજમેન્ટ'),
+        title: Text('સ્ટાફ મેનેજમેન્ટ'.tr),
       ),
       body: Stack(
         children: [
@@ -353,7 +353,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
               }
 
               if (snapshot.hasError) {
-                return Center(child: Text('ભૂલ આવી: ${snapshot.error}'));
+                return Center(child: Text('${'ભૂલ આવી:'.tr} ${snapshot.error}'));
               }
 
               final staffList = snapshot.data ?? [];
@@ -381,7 +381,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _showAddStaffDialog,
         icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text('નવો સ્ટાફ ઉમેરો', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        label: Text('નવો સ્ટાફ ઉમેરો'.tr, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: theme.colorScheme.primary,
       ),
     );
@@ -446,12 +446,12 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.edit_outlined, size: 20),
-                      tooltip: 'સુધારો',
+                      tooltip: 'સુધારો'.tr,
                       onPressed: () => _showEditStaffDialog(staff),
                     ),
                     IconButton(
                       icon: const Icon(Icons.vpn_key_outlined, size: 20),
-                      tooltip: 'પાસવર્ડ બદલો',
+                      tooltip: 'પાસવર્ડ બદલો'.tr,
                       onPressed: () => _showResetPasswordDialog(staff),
                     ),
                   ],
@@ -460,7 +460,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      staff.isActive ? 'એક્ટિવ' : 'ડીએક્ટિવ',
+                      staff.isActive ? 'એક્ટિવ'.tr : 'ડીએક્ટિવ'.tr,
                       style: TextStyle(
                         fontSize: 11,
                         color: staff.isActive ? theme.colorScheme.primary : Colors.redAccent,
@@ -490,14 +490,14 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
         children: [
           Icon(Icons.people_outline, size: 70, color: Colors.grey.withOpacity(0.4)),
           const SizedBox(height: 16),
-          const Text(
-            'કોઈ સ્ટાફ મેમ્બર મળ્યો નથી',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+          Text(
+            'કોઈ સ્ટાફ મેમ્બર મળ્યો નથી'.tr,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
           const SizedBox(height: 6),
-          const Text(
-            'નવો સ્ટાફ યુઝર ઉમેરવા માટે નીચેના બટન પર ક્લિક કરો.',
-            style: TextStyle(fontSize: 12, color: Colors.grey),
+          Text(
+            'નવો સ્ટાફ યુઝર ઉમેરવા માટે નીચેના બટન પર ક્લિક કરો.'.tr,
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
             textAlign: TextAlign.center,
           ),
         ],
@@ -507,7 +507,7 @@ class _StaffManagementPageState extends State<StaffManagementPage> {
 
   InputDecoration _buildInputDecoration(String label, IconData icon, ThemeData theme) {
     return InputDecoration(
-      labelText: label,
+      labelText: label.tr,
       prefixIcon: Icon(icon, color: theme.colorScheme.primary, size: 20),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),

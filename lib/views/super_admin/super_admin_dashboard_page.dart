@@ -29,19 +29,22 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(company.isActive ? 'નિષ્ક્રિય કરવો?' : 'સક્રિય કરવો?'),
-        content: Text('શું તમે ખરેખર ${company.companyName} ને ${company.isActive ? 'નિષ્ક્રિય' : 'સક્રિય'} કરવા માંગો છો?'),
+        title: Text(company.isActive ? 'નિષ્ક્રિય કરવો?'.tr : 'સક્રિય કરવો?'.tr),
+        content: Text('શું તમે ખરેખર @name ને @status કરવા માંગો છો?'.trParams({
+          'name': company.companyName,
+          'status': company.isActive ? 'નિષ્ક્રિય'.tr : 'સક્રિય'.tr,
+        })),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('ના', style: TextStyle(color: Colors.grey)),
+            child: Text('ના'.tr, style: const TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
               backgroundColor: company.isActive ? Colors.redAccent : Colors.teal,
             ),
-            child: const Text('હા', style: TextStyle(color: Colors.white)),
+            child: Text('હા'.tr, style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -52,13 +55,13 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
         await _authService.updateCompanyStatus(company.companyId, !company.isActive);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${company.companyName} ની સ્થિતિ બદલાઈ છે.')),
+            SnackBar(content: Text('@name ની સ્થિતિ બદલાઈ છે.'.trParams({'name': company.companyName}))),
           );
         }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('ભૂલ આવી: $e')),
+            SnackBar(content: Text('ભૂલ આવી: \$e'.tr.replaceAll(r'$e', e.toString()))),
           );
         }
       }
@@ -74,9 +77,9 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
           : company.subscriptionExpiryDate.add(const Duration(days: 30)),
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
-      helpText: '${company.companyName} સબ્સ્ક્રિપ્શન લંબાવો',
-      confirmText: 'પસંદ કરો',
-      cancelText: 'રદ કરો',
+      helpText: '@name સબ્સ્ક્રિપ્શન લંબાવો'.trParams({'name': company.companyName}),
+      confirmText: 'પસંદ કરો'.tr,
+      cancelText: 'રદ કરો'.tr,
     );
 
     if (picked != null) {
@@ -85,14 +88,17 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('${company.companyName} સબ્સ્ક્રિપ્શન ${DateFormat('dd-MM-yyyy').format(picked)} સુધી લંબાવ્યું છે.'),
+              content: Text('@name સબ્સ્ક્રિપ્શન @date સુધી લંબાવ્યું છે.'.trParams({
+                'name': company.companyName,
+                'date': DateFormat('dd-MM-yyyy').format(picked),
+              })),
             ),
           );
         }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('ભૂલ આવી: $e')),
+            SnackBar(content: Text('ભૂલ આવી: \$e'.tr.replaceAll(r'$e', e.toString()))),
           );
         }
       }
@@ -104,17 +110,20 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('પાસવર્ડ રીસેટ?'),
-        content: Text('શું તમે ${company.companyName} ના એડમિન (${company.email}) ને પાસવર્ડ રીસેટ લિંક મોકલવા માંગો છો?'),
+        title: Text('પાસવર્ડ રીસેટ?'.tr),
+        content: Text('શું તમે @name ના એડમિન (@email) ને પાસવર્ડ રીસેટ લિંક મોકલવા માંગો છો?'.trParams({
+          'name': company.companyName,
+          'email': company.email,
+        })),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('ના', style: TextStyle(color: Colors.grey)),
+            child: Text('ના'.tr, style: const TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
-            child: const Text('હા, મોકલો', style: TextStyle(color: Colors.white)),
+            child: Text('હા, મોકલો'.tr, style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -125,13 +134,13 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
         await _authService.sendPasswordReset(company.email);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${company.email} પર પાસવર્ડ રીસેટ ઇમેલ મોકલ્યો છે.')),
+            SnackBar(content: Text('@email પર પાસવર્ડ રીસેટ ઇમેલ મોકલ્યો છે.'.trParams({'email': company.email}))),
           );
         }
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('ઇમેલ મોકલવામાં ભૂલ આવી: $e')),
+            SnackBar(content: Text('ઇમેલ મોકલવામાં ભૂલ આવી: \$e'.tr.replaceAll(r'$e', e.toString()))),
           );
         }
       }
@@ -145,12 +154,12 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('સુપર એડમિન ડેશબોર્ડ'),
+        title: Text('સુપર એડમિન ડેશબોર્ડ'.tr),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout_rounded),
             onPressed: () => authController.logout(),
-            tooltip: 'લૉગ આઉટ',
+            tooltip: 'લૉગ આઉટ'.tr,
           ),
         ],
       ),
@@ -161,7 +170,7 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return Center(child: Text('ભૂલ આવી: ${snapshot.error}'));
+            return Center(child: Text("${'ભૂલ આવી'.tr}: ${snapshot.error}"));
           }
 
           final companies = snapshot.data ?? [];
@@ -186,13 +195,13 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    _buildStatCard('કુલ કંપની', total.toString(), theme.brightness == Brightness.light ? Colors.blue.shade700 : Colors.blueAccent, theme),
+                    _buildStatCard('કુલ કંપની'.tr, total.toString(), theme.brightness == Brightness.light ? Colors.blue.shade700 : Colors.blueAccent, theme),
                     const SizedBox(width: 8),
-                    _buildStatCard('સક્રિય', active.toString(), theme.brightness == Brightness.light ? Colors.teal.shade700 : Colors.tealAccent, theme),
+                    _buildStatCard('સક્રિય'.tr, active.toString(), theme.brightness == Brightness.light ? Colors.teal.shade700 : Colors.tealAccent, theme),
                     const SizedBox(width: 8),
-                    _buildStatCard('સમાપ્ત', expired.toString(), theme.brightness == Brightness.light ? Colors.red.shade700 : Colors.redAccent, theme),
+                    _buildStatCard('સમાપ્ત'.tr, expired.toString(), theme.brightness == Brightness.light ? Colors.red.shade700 : Colors.redAccent, theme),
                     const SizedBox(width: 8),
-                    _buildStatCard('નિષ્ક્રિય', inactive.toString(), theme.brightness == Brightness.light ? Colors.orange.shade800 : Colors.orangeAccent, theme),
+                    _buildStatCard('નિષ્ક્રિય'.tr, inactive.toString(), theme.brightness == Brightness.light ? Colors.orange.shade800 : Colors.orangeAccent, theme),
                   ],
                 ),
               ),
@@ -216,7 +225,7 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
                       color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white,
                     ),
                     decoration: InputDecoration(
-                      hintText: 'કંપની નામ અથવા એડમિન સર્ચ કરો...',
+                      hintText: 'કંપની નામ અથવા એડમિન સર્ચ કરો...'.tr,
                       hintStyle: TextStyle(
                         color: theme.brightness == Brightness.light
                             ? Colors.black38
@@ -257,7 +266,7 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: Text(
-                  'નોંધાયેલ કંપનીઓ (${filteredCompanies.length})',
+                  "${'નોંધાયેલ કંપનીઓ'.tr} (${filteredCompanies.length})",
                   style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.grey),
                 ),
               ),
@@ -287,7 +296,7 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
           MaterialPageRoute(builder: (context) => const RegisterCompanyPage()),
         ),
         icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text('નવી કંપની રજીસ્ટર', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        label: Text('નવી કંપની રજીસ્ટર'.tr, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: theme.colorScheme.primary,
         elevation: 6,
       ),
@@ -342,7 +351,7 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
           ),
           const SizedBox(height: 12),
           Text(
-            'કોઈ કંપની મળી નથી',
+            'કોઈ કંપની મળી નથી'.tr,
             style: TextStyle(
               fontSize: 16,
               color: isLight ? Colors.black38 : Colors.white.withOpacity(0.5),
@@ -404,7 +413,7 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         subtitle: Text(
-          'ID: ${company.companyId} | ઓનર: ${company.ownerName}',
+          "ID: ${company.companyId} | ${'ઓનર'.tr}: ${company.ownerName}",
           style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.6)),
         ),
         trailing: Container(
@@ -415,7 +424,7 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
             border: Border.all(color: statusColor.withOpacity(0.3)),
           ),
           child: Text(
-            statusText,
+            statusText.tr,
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.bold,
@@ -436,15 +445,15 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
           const SizedBox(height: 12),
           
           // Company details listing
-          _buildDetailRow('એડમિન ઇમેલ', company.email, Icons.email_outlined, theme),
+          _buildDetailRow('એડમિન ઇમેલ'.tr, company.email, Icons.email_outlined, theme),
           _buildDetailRow(
-            'સબ્સ્ક્રિપ્શન ચાલુ થયા તારીખ', 
+            'સબ્સ્ક્રિપ્શન ચાલુ થયા તારીખ'.tr, 
             DateFormat('dd-MM-yyyy').format(company.subscriptionStartDate), 
             Icons.date_range, 
             theme
           ),
           _buildDetailRow(
-            'સબ્સ્ક્રિપ્શન સમાપ્તિ તારીખ', 
+            'સબ્સ્ક્રિપ્શન સમાપ્તિ તારીખ'.tr, 
             DateFormat('dd-MM-yyyy').format(company.subscriptionExpiryDate), 
             Icons.event_busy, 
             theme,
@@ -453,8 +462,8 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
                 : (theme.brightness == Brightness.light ? Colors.teal.shade700 : Colors.tealAccent),
           ),
           _buildDetailRow(
-            'પર્ચેઝ સ્કીમ (Purchase Scheme)', 
-            company.purchaseScheme == 'online' ? 'ઓનલાઇન (Online)' : 'ઓફલાઇન (Offline)', 
+            'પર્ચેઝ સ્કીમ (Purchase Scheme)'.tr, 
+            company.purchaseScheme == 'online' ? 'ઓનલાઇન (Online)'.tr : 'ઓફલાઇન (Offline)'.tr, 
             Icons.shopping_bag_outlined, 
             theme,
             valueColor: company.purchaseScheme == 'online'
@@ -470,7 +479,7 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
               Icon(Icons.edit_note, size: 18, color: theme.colorScheme.secondary),
               const SizedBox(width: 8),
               Text(
-                'સ્કીમ બદલો: ',
+                'સ્કીમ બદલો: '.tr,
                 style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.6)),
               ),
               const SizedBox(width: 8),
@@ -494,26 +503,29 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
                           await _authService.updatePurchaseScheme(company.companyId, newValue);
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('${company.companyName} ની સ્કીમ બદલીને ${newValue == 'online' ? 'ઓનલાઇન' : 'ઓફલાઇન'} કરાઈ છે.')),
+                              SnackBar(content: Text('@name ની સ્કીમ બદલીને @scheme કરાઈ છે.'.trParams({
+                                'name': company.companyName,
+                                'scheme': newValue == 'online' ? 'ઓનલાઇન'.tr : 'ઓફલાઇન'.tr,
+                              }))),
                             );
                           }
                         } catch (e) {
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('સ્કીમ બદલવામાં ભૂલ આવી: $e')),
+                              SnackBar(content: Text('સ્કીમ બદલવામાં ભૂલ આવી: \$e'.tr.replaceAll(r'$e', e.toString()))),
                             );
                           }
                         }
                       }
                     },
-                    items: const [
+                    items: [
                       DropdownMenuItem(
                         value: 'offline',
-                        child: Text('ઓફલાઇન (Offline)'),
+                        child: Text('ઓફલાઇન (Offline)'.tr),
                       ),
                       DropdownMenuItem(
                         value: 'online',
-                        child: Text('ઓનલાઇન (Online)'),
+                        child: Text('ઓનલાઇન (Online)'.tr),
                       ),
                     ],
                   ),
@@ -537,7 +549,7 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
                     color: Colors.white,
                   ),
                   label: Text(
-                    company.isActive ? 'નિષ્ક્રિય કરો' : 'સક્રિય કરો',
+                    company.isActive ? 'નિષ્ક્રિય કરો'.tr : 'સક્રિય કરો'.tr,
                     style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
@@ -554,9 +566,9 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
                 child: ElevatedButton.icon(
                   onPressed: () => _extendSubscription(company),
                   icon: const Icon(Icons.add_moderator, size: 16, color: Colors.white),
-                  label: const Text(
-                    'સબ્સ્ક્રિપ્શન વધારો',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
+                  label: Text(
+                    'સબ્સ્ક્રિપ્શન વધારો'.tr,
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.colorScheme.primary,
@@ -572,9 +584,9 @@ class _SuperAdminDashboardPageState extends State<SuperAdminDashboardPage> {
                 child: ElevatedButton.icon(
                   onPressed: () => _resetAdminPassword(company),
                   icon: const Icon(Icons.vpn_key_outlined, size: 16, color: Colors.white),
-                  label: const Text(
-                    'પાસવર્ડ રીસેટ',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
+                  label: Text(
+                    'પાસવર્ડ રીસેટ'.tr,
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueGrey.shade800,

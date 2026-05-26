@@ -171,7 +171,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('ફોટો સિલેક્ટ કરવામાં ભૂલ થઈ: $e')),
+        SnackBar(content: Text('ફોટો સિલેક્ટ કરવામાં ભૂલ થઈ: \$e'.tr.replaceAll(r'$e', e.toString()))),
       );
     }
   }
@@ -205,7 +205,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('ફોટો માટે લેબલ પસંદ કરો'),
+          title: Text('ફોટો માટે લેબલ પસંદ કરો'.tr),
           content: SizedBox(
             width: double.maxFinite,
             child: ListView.builder(
@@ -213,7 +213,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
               itemCount: labels.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(labels[index]),
+                  title: Text(labels[index].tr),
                   onTap: () => Navigator.pop(context, labels[index]),
                 );
               },
@@ -289,15 +289,15 @@ class _ReportFormPageState extends State<ReportFormPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(isEditMode
-                ? 'રિપોર્ટ સફળતાપૂર્વક સુધારવામાં આવ્યો છે!'
-                : 'રિપોર્ટ સફળતાપૂર્વક સાચવવામાં આવ્યો છે!'),
+                ? 'રિપોર્ટ સફળતાપૂર્વક સુધારવામાં આવ્યો છે!'.tr
+                : 'રિપોર્ટ સફળતાપૂર્વક સાચવવામાં આવ્યો છે!'.tr),
           ),
         );
         Navigator.pop(context, true);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('સેવ કરવામાં ભૂલ થઈ: $e')),
+        SnackBar(content: Text('સેવ કરવામાં ભૂલ થઈ: \$e'.tr.replaceAll(r'$e', e.toString()))),
       );
     }
   }
@@ -333,12 +333,12 @@ class _ReportFormPageState extends State<ReportFormPage> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditMode ? 'રિપોર્ટ સુધારો' : 'નવું ઇન્સ્પેક્શન'),
+        title: Text(isEditMode ? 'રિપોર્ટ સુધારો'.tr : 'નવું ઇન્સ્પેક્શન'.tr),
         actions: [
           if (_currentStep == _totalSteps - 1)
             TextButton(
               onPressed: _saveReport,
-              child: Text(isEditMode ? 'સુધારો' : 'સાચવો', style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 16)),
+              child: Text(isEditMode ? 'સુધારો'.tr : 'સાચવો'.tr, style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 16)),
             ),
         ],
       ),
@@ -379,7 +379,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
   // Custom Progress Stepper
   Widget _buildStepperIndicator() {
     final theme = Theme.of(context);
-    final List<String> stepTitles = ['માહિતી', 'બોડી / કાચ', 'એન્જિન', 'ડ્રાઇવિંગ / ફોટા'];
+    final List<String> stepTitles = ['માહિતી'.tr, 'બોડી / કાચ'.tr, 'એન્જિન'.tr, 'ડ્રાઇવિંગ / ફોટા'.tr];
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
@@ -467,7 +467,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   ),
-                  child: const Text('પાછળ'),
+                  child: Text('પાછળ'.tr),
                 )
               : const SizedBox.shrink(),
 
@@ -484,8 +484,8 @@ class _ReportFormPageState extends State<ReportFormPage> {
               children: [
                 Text(
                   _currentStep == _totalSteps - 1
-                      ? (isEditMode ? 'સુધારો કરો' : 'સાચવો અને સેન્ડ')
-                      : 'આગળ',
+                      ? (isEditMode ? 'સુધારો કરો'.tr : 'સાચવો અને સેન્ડ'.tr)
+                      : 'આગળ'.tr,
                   style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 6),
@@ -516,7 +516,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label,
+            label.tr,
             style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
           ),
           const SizedBox(height: 8),
@@ -526,7 +526,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
             children: options.map((option) {
               final isSelected = currentValue == option;
               return ChoiceChip(
-                label: Text(option),
+                label: Text(option.tr),
                 selected: isSelected,
                 selectedColor: theme.colorScheme.primary.withOpacity(0.2),
                 labelStyle: TextStyle(
@@ -557,32 +557,32 @@ class _ReportFormPageState extends State<ReportFormPage> {
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        const Text(
-          'ગાડીની બેઝિક માહિતી ભરો',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Text(
+          'ગાડીની બેઝિક માહિતી ભરો'.tr,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 20),
         TextFormField(
           controller: _modelController,
           decoration: InputDecoration(
-            labelText: 'Model (ગાડીનું મોડેલ)',
+            labelText: 'Model (ગાડીનું મોડેલ)'.tr,
             prefixIcon: const Icon(Icons.directions_car),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
-          validator: (value) => value == null || value.trim().isEmpty ? 'કૃપા કરીને મોડેલ દાખલ કરો' : null,
+          validator: (value) => value == null || value.trim().isEmpty ? 'કૃપા કરીને મોડેલ દાખલ કરો'.tr : null,
         ),
         const SizedBox(height: 16),
         DropdownButtonFormField<String>(
           value: _selectedOwner,
           decoration: InputDecoration(
-            labelText: 'Owner (ઓનર)',
+            labelText: 'Owner (ઓનર)'.tr,
             prefixIcon: const Icon(Icons.person),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
           items: _ownerOptions.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(value),
+              child: Text(value.tr),
             );
           }).toList(),
           onChanged: (newValue) {
@@ -592,16 +592,16 @@ class _ReportFormPageState extends State<ReportFormPage> {
               });
             }
           },
-          validator: (value) => value == null || value.trim().isEmpty ? 'કૃપા કરીને ઓનર પસંદ કરો' : null,
+          validator: (value) => value == null || value.trim().isEmpty ? 'કૃપા કરીને ઓનર પસંદ કરો'.tr : null,
         ),
         const SizedBox(height: 16),
         TextFormField(
           controller: _ownerNameController,
           decoration: InputDecoration(
-            labelText: 'ઓનરનું નામ (Owner Name)',
+            labelText: 'ઓનરનું નામ (Owner Name)'.tr,
             prefixIcon: const Icon(Icons.badge),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            hintText: 'દા.ત. રમેશભાઈ પટેલ (માત્ર માહિતી માટે)',
+            hintText: 'દા.ત. રમેશભાઈ પટેલ (માત્ર માહિતી માટે)'.tr,
           ),
         ),
         const SizedBox(height: 16),
@@ -609,10 +609,10 @@ class _ReportFormPageState extends State<ReportFormPage> {
           controller: _ownerMobileController,
           keyboardType: TextInputType.phone,
           decoration: InputDecoration(
-            labelText: 'મોબાઈલ નંબર (Mobile Number)',
+            labelText: 'મોબાઈલ નંબર (Mobile Number)'.tr,
             prefixIcon: const Icon(Icons.phone),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            hintText: 'દા.ત. 9876543210 (માત્ર માહિતી માટે)',
+            hintText: 'દા.ત. 9876543210 (માત્ર માહિતી માટે)'.tr,
           ),
         ),
         const SizedBox(height: 16),
@@ -620,22 +620,22 @@ class _ReportFormPageState extends State<ReportFormPage> {
           controller: _kmController,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-            labelText: 'Kilometers (કિલોમીટર)',
+            labelText: 'Kilometers (કિલોમીટર)'.tr,
             prefixIcon: const Icon(Icons.speed),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
-          validator: (value) => value == null || value.trim().isEmpty ? 'કૃપા કરીને કિલોમીટર દાખલ કરો' : null,
+          validator: (value) => value == null || value.trim().isEmpty ? 'કૃપા કરીને કિલોમીટર દાખલ કરો'.tr : null,
         ),
         const SizedBox(height: 16),
         TextFormField(
           controller: _vimoController,
           decoration: InputDecoration(
-            labelText: 'Vimo / Insurance (વીમો)',
+            labelText: 'Vimo / Insurance (વીમો)'.tr,
             prefixIcon: const Icon(Icons.security),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            hintText: 'દા.ત. ચાલુ છે, તારીખ અથવા પૂરું થયેલ છે',
+            hintText: 'દા.ત. ચાલુ છે, તારીખ અથવા પૂરું થયેલ છે'.tr,
           ),
-          validator: (value) => value == null || value.trim().isEmpty ? 'કૃપા કરીને વીમાની વિગત ભરો' : null,
+          validator: (value) => value == null || value.trim().isEmpty ? 'કૃપા કરીને વીમાની વિગત ભરો'.tr : null,
         ),
       ],
     );
@@ -649,9 +649,9 @@ class _ReportFormPageState extends State<ReportFormPage> {
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        const Text(
-          'બોડી અને કાચનું ઇન્સ્પેક્શન',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Text(
+          'બોડી અને કાચનું ઇન્સ્પેક્શન'.tr,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         
@@ -770,10 +770,10 @@ class _ReportFormPageState extends State<ReportFormPage> {
         TextFormField(
           controller: _touchupController,
           decoration: InputDecoration(
-            labelText: 'ગાડી મા કેટલો tachap (Touchup Details)',
+            labelText: 'ગાડી મા કેટલો tachap (Touchup Details)'.tr,
             prefixIcon: const Icon(Icons.format_paint),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            hintText: 'દા.ત. ૨ દરવાજા ટચઅપ, બોનેટ રીપેઇન્ટ...',
+            hintText: 'દા.ત. ૨ દરવાજા ટચઅપ, બોનેટ રીપેઇન્ટ...'.tr,
           ),
         ),
       ],
@@ -785,16 +785,16 @@ class _ReportFormPageState extends State<ReportFormPage> {
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        const Text(
-          'મિકેનિકલ અને એન્જિન ચેક',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Text(
+          'મિકેનિકલ અને એન્જિન ચેક'.tr,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
 
         TextFormField(
           controller: _engineLineController,
           decoration: InputDecoration(
-            labelText: 'એન્જિન Lin (Engine Line Details)',
+            labelText: 'એન્જિન Lin (Engine Line Details)'.tr,
             prefixIcon: const Icon(Icons.construction),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
@@ -810,7 +810,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
         _buildChipSelector(
           label: 'એન્જિન ધુમાડો (Engine Smoke)',
           currentValue: _engineSmoke,
-          options: ['નથી', 'સફેદ ધુમાડો', 'કાળો ધુમાડો'],
+          options: ['નથી', 'સெફેદ ધુમાડો', 'કાળો ધુમાડો'],
           onSelected: (val) => setState(() => _engineSmoke = val),
         ),
         _buildChipSelector(
@@ -834,9 +834,9 @@ class _ReportFormPageState extends State<ReportFormPage> {
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        const Text(
-          'ડ્રાઇવિંગ, કેબિન અને ફોટા',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Text(
+          'ડ્રાઇવિંગ, કેબિન અને ફોટા'.tr,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
 
@@ -856,7 +856,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
         TextFormField(
           controller: _drivingController,
           decoration: InputDecoration(
-            labelText: 'Gadi ચાલવામાં (Driving Performance)',
+            labelText: 'Gadi ચાલવામાં (Driving Performance)'.tr,
             prefixIcon: const Icon(Icons.alt_route),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
@@ -891,9 +891,9 @@ class _ReportFormPageState extends State<ReportFormPage> {
         const SizedBox(height: 20),
         const Divider(),
         const SizedBox(height: 12),
-        const Text(
-          'ગાડીના ફોટા ઉમેરો (Camera / Media)',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        Text(
+          'ગાડીના ફોટા ઉમેરો (Camera / Media)'.tr,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
         Row(
@@ -902,7 +902,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
               child: ElevatedButton.icon(
                 onPressed: () => _pickImage(ImageSource.camera),
                 icon: const Icon(Icons.camera_alt, color: Colors.white),
-                label: const Text('કેમેરા', style: TextStyle(color: Colors.white)),
+                label: Text('કેમેરા'.tr, style: const TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueGrey,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -915,7 +915,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
               child: ElevatedButton.icon(
                 onPressed: () => _pickImage(ImageSource.gallery),
                 icon: const Icon(Icons.photo_library, color: Colors.white),
-                label: const Text('ગેલેરી', style: TextStyle(color: Colors.white)),
+                label: Text('ગેલેરી'.tr, style: const TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueGrey,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -933,7 +933,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    'કોઈ ફોટો ઉમેરેલ નથી',
+                    'કોઈ ફોટો ઉમેરેલ નથી'.tr,
                     style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
                   ),
                 ),
@@ -950,6 +950,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
                 itemCount: _attachedImages.length,
                 itemBuilder: (context, idx) {
                   final img = _attachedImages[idx];
+                  final displayLabel = img.label.tr;
                   return Stack(
                     children: [
                       Container(
@@ -976,7 +977,7 @@ class _ReportFormPageState extends State<ReportFormPage> {
                               padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                               color: Colors.black54,
                               child: Text(
-                                img.label.contains('(') ? img.label.split('(').first.trim() : img.label,
+                                displayLabel.contains('(') ? displayLabel.split('(').first.trim() : displayLabel,
                                 style: const TextStyle(color: Colors.white, fontSize: 9),
                                 textAlign: TextAlign.center,
                                 maxLines: 1,

@@ -65,9 +65,9 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
       initialDate: _soldDate,
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now().add(const Duration(days: 30)),
-      helpText: 'વેચાણ તારીખ પસંદ કરો',
-      confirmText: 'પસંદ કરો',
-      cancelText: 'રદ કરો',
+      helpText: 'વેચાણ તારીખ પસંદ કરો'.tr,
+      confirmText: 'પસંદ કરો'.tr,
+      cancelText: 'રદ કરો'.tr,
     );
     if (picked != null) {
       setState(() {
@@ -120,14 +120,14 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
 
     if (success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('વેચેલી કારની વિગતો સફળતાપૂર્વક સાચવી લેવામાં આવી છે.')),
+        SnackBar(content: Text('વેચેલી કારની વિગતો સફળતાપૂર્વક સાચવી લેવામાં આવી છે.'.tr)),
       );
       Navigator.pop(context, true);
     } else {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('વેચેલી કાર સાચવતી વખતે કોઈ ભૂલ આવી.'),
+          SnackBar(
+            content: Text('વેચેલી કાર સાચવતી વખતે કોઈ ભૂલ આવી.'.tr),
             backgroundColor: Colors.redAccent,
           ),
         );
@@ -166,7 +166,7 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    isManual ? 'નવી વેચેલી કાર ઉમેરો' : 'વેચેલ માર્ક કરો',
+                    isManual ? 'નવી વેચેલી કાર ઉમેરો'.tr : 'વેચેલ માર્ક કરો'.tr,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -182,16 +182,16 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
               Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
               
               if (isManual) ...[
-                const Text(
-                  'ગાડીની વિગતો (Car Details)',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
+                Text(
+                  'ગાડીની વિગતો (Car Details)'.tr,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
                 ),
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: _modelController,
                   style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
                   decoration: _buildInputDecoration('મોડેલ નામ', Icons.directions_car, theme, isLight),
-                  validator: (value) => value!.trim().isEmpty ? 'ગાડીનું મોડેલ દાખલ કરો' : null,
+                  validator: (value) => value!.trim().isEmpty ? 'ગાડીનું મોડેલ દાખલ કરો'.tr : null,
                 ),
                 const SizedBox(height: 12),
                 Row(
@@ -201,7 +201,7 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                         controller: _ownerController,
                         style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
                         decoration: _buildInputDecoration('ઓનર (દા.ત. 1, 2)', Icons.numbers, theme, isLight),
-                        validator: (value) => value!.trim().isEmpty ? 'ઓનર દાખલ કરો' : null,
+                        validator: (value) => value!.trim().isEmpty ? 'ઓનર દાખલ કરો'.tr : null,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -211,7 +211,7 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                         keyboardType: TextInputType.number,
                         style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
                         decoration: _buildInputDecoration('કિલોમીટર', Icons.speed, theme, isLight),
-                        validator: (value) => value!.trim().isEmpty ? 'કિલોમીટર દાખલ કરો' : null,
+                        validator: (value) => value!.trim().isEmpty ? 'કિલોમીટર દાખલ કરો'.tr : null,
                       ),
                     ),
                   ],
@@ -264,7 +264,7 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                               ),
                             ),
                             Text(
-                              'ઓનર: ${widget.car!.owner} | કિલોમીટર: ${widget.car!.kilometers} km',
+                              "${'ઓનર:'.tr} ${widget.car!.owner} | ${'કિલોમીટર:'.tr} ${widget.car!.kilometers} km",
                               style: TextStyle(
                                 fontSize: 12, 
                                 color: isLight ? Colors.black54 : Colors.white.withOpacity(0.6),
@@ -279,9 +279,9 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                 const SizedBox(height: 20),
               ],
 
-              const Text(
-                'ગ્રાહક અને વેચાણ વિગતો (Customer & Sales)',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
+              Text(
+                'ગ્રાહક અને વેચાણ વિગતો (Customer & Sales)'.tr,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
               ),
               const SizedBox(height: 12),
 
@@ -290,7 +290,7 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                 controller: _customerNameController,
                 style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
                 decoration: _buildInputDecoration('ગ્રાહકનું નામ', Icons.person, theme, isLight),
-                validator: (value) => value!.trim().isEmpty ? 'ગ્રાહકનું નામ દાખલ કરો' : null,
+                validator: (value) => value!.trim().isEmpty ? 'ગ્રાહકનું નામ દાખલ કરો'.tr : null,
               ),
               const SizedBox(height: 12),
 
@@ -304,8 +304,8 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                       style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
                       decoration: _buildInputDecoration('મોબાઇલ નંબર', Icons.phone_iphone, theme, isLight),
                       validator: (value) {
-                        if (value!.trim().isEmpty) return 'નંબર દાખલ કરો';
-                        if (value.trim().length < 10) return 'યોગ્ય નંબર દાખલ કરો';
+                        if (value!.trim().isEmpty) return 'નંબર દાખલ કરો'.tr;
+                        if (value.trim().length < 10) return 'યોગ્ય નંબર દાખલ કરો'.tr;
                         return null;
                       },
                     ),
@@ -317,7 +317,7 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                       keyboardType: TextInputType.number,
                       style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
                       decoration: _buildInputDecoration('વેચાણ કિંમત (રૂ.)', Icons.currency_rupee, theme, isLight),
-                      validator: (value) => value!.trim().isEmpty ? 'કિંમત દાખલ કરો' : null,
+                      validator: (value) => value!.trim().isEmpty ? 'કિંમત દાખલ કરો'.tr : null,
                     ),
                   ),
                 ],
@@ -330,14 +330,14 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                 maxLines: 2,
                 style: TextStyle(color: isLight ? Colors.black87 : Colors.white),
                 decoration: _buildInputDecoration('સરનામું', Icons.location_on_outlined, theme, isLight),
-                validator: (value) => value!.trim().isEmpty ? 'ગ્રાહકનું સરનામું દાખલ કરો' : null,
+                validator: (value) => value!.trim().isEmpty ? 'ગ્રાહકનું સરનામું દાખલ કરો'.tr : null,
               ),
               const SizedBox(height: 12),
 
               // Sold Date Picker
-              const Text(
-                'વેચાણ તારીખ',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey),
+              Text(
+                'વેચાણ તારીખ'.tr,
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey),
               ),
               const SizedBox(height: 6),
               InkWell(
@@ -397,9 +397,9 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
                           height: 20,
                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                         )
-                      : const Text(
-                          'વિગતો સાચવો',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                      : Text(
+                          'વિગતો સાચવો'.tr,
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
                         ),
                 ),
               ),
@@ -412,7 +412,7 @@ class _SoldCarFormDialogState extends State<SoldCarFormDialog> {
 
   InputDecoration _buildInputDecoration(String label, IconData icon, ThemeData theme, bool isLight) {
     return InputDecoration(
-      labelText: label,
+      labelText: label.tr,
       labelStyle: TextStyle(
         color: isLight ? Colors.black54 : Colors.white.withOpacity(0.6), 
         fontSize: 13,

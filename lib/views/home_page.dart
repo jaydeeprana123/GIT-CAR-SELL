@@ -45,21 +45,21 @@ class _HomePageState extends State<HomePage>
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('રિપોર્ટ ડિલીટ કરો?'),
-        content: const Text(
-          'શું તમે ખરેખર આ ઇન્સ્પેક્શન રિપોર્ટ કાઢી નાખવા માંગો છો?',
+        title: Text('રિપોર્ટ ડિલીટ કરો?'.tr),
+        content: Text(
+          'શું તમે ખરેખર આ ઇન્સ્પેક્શન રિપોર્ટ કાઢી નાખવા માંગો છો?'.tr,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('ના', style: TextStyle(color: Colors.grey)),
+            child: Text('ના'.tr, style: const TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-            child: const Text(
-              'હા, ડિલીટ',
-              style: TextStyle(color: Colors.white),
+            child: Text(
+              'હા, ડિલીટ'.tr,
+              style: const TextStyle(color: Colors.white),
             ),
           ),
         ],
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage>
       final success = await controller.deleteReportData(id);
       if (success && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('રિપોર્ટ સફળતાપૂર્વક ડિલીટ કરાયો છે')),
+          SnackBar(content: Text('રિપોર્ટ સફળતાપૂર્વક ડિલીટ કરાયો છે'.tr)),
         );
       }
     }
@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage>
                         ),
                         const SizedBox(width: 12),
                         Text(
-                          'વેચેલી કારની વિગતો',
+                          'વેચેલી કારની વિગતો'.tr,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage>
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'ગાડીની બેઝિક વિગતો (Car Basic Details)',
+                      'ગાડીની બેઝિક વિગતો (Car Basic Details)'.tr,
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
@@ -211,21 +211,21 @@ class _HomePageState extends State<HomePage>
                     children: [
                       _buildDetailRow(
                         Icons.directions_car,
-                        'મોડેલ (Model)',
+                        'મોડેલ (Model)'.tr,
                         report.model.isEmpty ? 'N/A' : report.model,
                         isLight: isLight,
                       ),
                       Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.person_outline,
-                        'ઓનર (Owner)',
+                        'ઓનર (Owner)'.tr,
                         report.owner.isEmpty ? 'N/A' : report.owner,
                         isLight: isLight,
                       ),
                       Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.speed,
-                        'કિલોમીટર (Kilometers)',
+                        'કિલોમીટર (Kilometers)'.tr,
                         '${report.kilometers.isEmpty ? '0' : report.kilometers} km',
                         isLight: isLight,
                       ),
@@ -244,7 +244,7 @@ class _HomePageState extends State<HomePage>
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'ગ્રાહકની સંપૂર્ણ વિગતો (Customer Details)',
+                      'ગ્રાહકની સંપૂર્ણ વિગતો (Customer Details)'.tr,
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
@@ -268,28 +268,28 @@ class _HomePageState extends State<HomePage>
                     children: [
                       _buildDetailRow(
                         Icons.person,
-                        'ગ્રાહકનું નામ (Customer Name)',
+                        'ગ્રાહકનું નામ (Customer Name)'.tr,
                         report.customerName ?? 'N/A',
                         isLight: isLight,
                       ),
                       Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.phone_iphone,
-                        'મોબાઇલ નંબર (Mobile Number)',
+                        'મોબાઇલ નંબર (Mobile Number)'.tr,
                         report.customerMobile ?? 'N/A',
                         isLight: isLight,
                       ),
                       Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.location_on_outlined,
-                        'સરનામું (Address)',
+                        'સરનામું (Address)'.tr,
                         report.customerAddress ?? 'N/A',
                         isLight: isLight,
                       ),
                       Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.currency_rupee,
-                        'વેચાણ કિંમત (Sold Price)',
+                        'વેચાણ કિંમત (Sold Price)'.tr,
                         report.soldPrice != null
                             ? '₹ ${report.soldPrice}'
                             : 'N/A',
@@ -299,16 +299,16 @@ class _HomePageState extends State<HomePage>
                       Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.calendar_today_outlined,
-                        'વેચાણ તારીખ (Sold Date)',
+                        'વેચાણ તારીખ (Sold Date)'.tr,
                         report.soldDate ?? 'N/A',
                         isLight: isLight,
                       ),
                       Divider(color: isLight ? theme.dividerColor : const Color(0xFF334155), height: 16),
                       _buildDetailRow(
                         Icons.note_alt_outlined,
-                        'રિમાર્ક્સ / નોંધ (Remarks)',
+                        'રિમાર્ક્સ / નોંધ (Remarks)'.tr,
                         (report.remarks == null || report.remarks!.isEmpty)
-                            ? 'કોઈ નોંધ નથી'
+                            ? 'કોઈ નોંધ નથી'.tr
                             : report.remarks!,
                         isLight: isLight,
                       ),
@@ -483,8 +483,8 @@ class _HomePageState extends State<HomePage>
                                     ),
                                     child: Text(
                                       role == 'Company Admin'
-                                          ? 'એડમિન'
-                                          : 'સ્ટાફ',
+                                          ? 'એડમિન'.tr
+                                          : 'સ્ટાફ'.tr,
                                       style: TextStyle(
                                         fontSize: 9,
                                         color: headerAccentColor,
@@ -501,7 +501,7 @@ class _HomePageState extends State<HomePage>
                               return Text(
                                 compName.isNotEmpty
                                     ? compName
-                                    : 'સેકન્ડ હેન્ડ ગાડી સેલ અને ઇન્સ્પેક્શન',
+                                    : 'સેકન્ડ હેન્ડ ગાડી સેલ અને ઇન્સ્પેક્શન'.tr,
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.white.withOpacity(0.85),
@@ -519,7 +519,7 @@ class _HomePageState extends State<HomePage>
                           Icons.settings_outlined,
                           color: Colors.white,
                         ),
-                        tooltip: 'સેટિંગ્સ',
+                        tooltip: 'સેટિંગ્સ'.tr,
                         onPressed: () {
                           Get.to(() => const SettingsPage());
                         },
@@ -529,21 +529,21 @@ class _HomePageState extends State<HomePage>
                           Icons.logout_rounded,
                           color: Colors.white,
                         ),
-                        tooltip: 'લૉગ આઉટ',
+                        tooltip: 'લૉગ આઉટ'.tr,
                         onPressed: () {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text('લૉગ આઉટ?'),
-                              content: const Text(
-                                'શું તમે ખરેખર લૉગ આઉટ કરવા માંગો છો?',
+                              title: Text('લૉગ આઉટ?'.tr),
+                              content: Text(
+                                'શું તમે ખરેખર લૉગ આઉટ કરવા માંગો છો?'.tr,
                               ),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: const Text(
-                                    'ના',
-                                    style: TextStyle(color: Colors.grey),
+                                  child: Text(
+                                    'ના'.tr,
+                                    style: const TextStyle(color: Colors.grey),
                                   ),
                                 ),
                                 ElevatedButton(
@@ -554,9 +554,9 @@ class _HomePageState extends State<HomePage>
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.redAccent,
                                   ),
-                                  child: const Text(
-                                    'હા',
-                                    style: TextStyle(color: Colors.white),
+                                  child: Text(
+                                    'હા'.tr,
+                                    style: const TextStyle(color: Colors.white),
                                   ),
                                 ),
                               ],
@@ -580,7 +580,7 @@ class _HomePageState extends State<HomePage>
                       onChanged: controller.updateSearchQuery,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        hintText: 'મોડેલ અથવા ઓનર સર્ચ કરો...',
+                        hintText: 'મોડેલ અથવા ઓનર સર્ચ કરો...'.tr,
                         hintStyle: TextStyle(
                           color: Colors.white.withOpacity(0.6),
                         ),
@@ -628,14 +628,14 @@ class _HomePageState extends State<HomePage>
                         fontWeight: FontWeight.normal,
                         fontSize: 13,
                       ),
-                      tabs: const [
+                      tabs: [
                         Tab(
-                          icon: Icon(Icons.directions_car_outlined, size: 18),
-                          text: 'ઉપલબ્ધ કાર (Unsold)',
+                          icon: const Icon(Icons.directions_car_outlined, size: 18),
+                          text: 'ઉપલબ્ધ કાર (Unsold)'.tr,
                         ),
                         Tab(
-                          icon: Icon(Icons.check_circle_outline, size: 18),
-                          text: 'વેચેલી કાર (Sold)',
+                          icon: const Icon(Icons.check_circle_outline, size: 18),
+                          text: 'વેચેલી કાર (Sold)'.tr,
                         ),
                       ],
                     ),
@@ -692,7 +692,7 @@ class _HomePageState extends State<HomePage>
           color: Colors.white,
         ),
         label: Text(
-          _tabController.index == 0 ? 'નવું ઇન્સ્પેક્શન' : 'નવી વેચેલી કાર',
+          _tabController.index == 0 ? 'નવું ઇન્સ્પેક્શન'.tr : 'નવી વેચેલી કાર'.tr,
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -715,7 +715,7 @@ class _HomePageState extends State<HomePage>
             children: [
               Obx(
                 () => Text(
-                  'ઉપલબ્ધ ગાડીઓ (${controller.reports.length})',
+                  "${'ઉપલબ્ધ ગાડીઓ'.tr} (${controller.reports.length})",
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -742,8 +742,8 @@ class _HomePageState extends State<HomePage>
             }
             if (controller.reports.isEmpty) {
               return _buildEmptyState(
-                'કોઈ ઉપલબ્ધ કાર મળી નથી',
-                'નવી કાર ઉમેરવા માટે નીચેના બટન પર ક્લિક કરો',
+                'કોઈ ઉપલબ્ધ કાર મળી નથી'.tr,
+                'નવી કાર ઉમેરવા માટે નીચેના બટન પર ક્લિક કરો'.tr,
               );
             }
             return RefreshIndicator(
@@ -782,7 +782,7 @@ class _HomePageState extends State<HomePage>
             children: [
               Obx(
                 () => Text(
-                  'વેચેલી ગાડીઓ (${controller.soldReports.length})',
+                  "${'વેચેલી ગાડીઓ'.tr} (${controller.soldReports.length})",
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -809,8 +809,8 @@ class _HomePageState extends State<HomePage>
             }
             if (controller.soldReports.isEmpty) {
               return _buildEmptyState(
-                'કોઈ વેચેલી કાર મળી નથી',
-                'વેચેલી કારની માહિતી મેન્યુઅલ ઉમેરવા નીચેના બટન પર ક્લિક કરો',
+                'કોઈ વેચેલી કાર મળી નથી'.tr,
+                'વેચેલી કારની માહિતી મેન્યુઅલ ઉમેરવા નીચેના બટન પર ક્લિક કરો'.tr,
               );
             }
             return RefreshIndicator(
@@ -950,7 +950,7 @@ class _HomePageState extends State<HomePage>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          report.model.isEmpty ? 'અજ્ઞાત મોડેલ' : report.model,
+                          report.model.isEmpty ? 'અજ્ઞાત મોડેલ'.tr : report.model,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -959,7 +959,7 @@ class _HomePageState extends State<HomePage>
                         const SizedBox(height: 4),
                         if (isSold) ...[
                           Text(
-                            'ગ્રાહક: ${report.customerName ?? 'N/A'}',
+                            "${'ગ્રાહક:'.tr} ${report.customerName ?? 'N/A'}",
                             style: TextStyle(
                               fontSize: 12,
                               color: theme.hintColor,
@@ -1000,7 +1000,7 @@ class _HomePageState extends State<HomePage>
                           ),
                         ] else ...[
                           Text(
-                            'ઓનર: ${report.owner.isEmpty ? 'N/A' : report.owner}',
+                            "${'ઓનર:'.tr} ${report.owner.isEmpty ? 'N/A' : report.owner}",
                             style: TextStyle(
                               fontSize: 12,
                               color: theme.hintColor,
@@ -1031,7 +1031,7 @@ class _HomePageState extends State<HomePage>
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                '$photoCount ફોટો',
+                                "$photoCount ${'ફોટો'.tr}",
                                 style: TextStyle(
                                   fontSize: 11,
                                   color: theme.hintColor,
@@ -1067,7 +1067,7 @@ class _HomePageState extends State<HomePage>
                                     ),
                                     const SizedBox(width: 6),
                                     Text(
-                                      'વેચેલ માર્ક કરો',
+                                      'વેચેલ માર્ક કરો'.tr,
                                       style: TextStyle(
                                         color: accentColor,
                                         fontSize: 11,

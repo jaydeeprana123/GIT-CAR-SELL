@@ -5,6 +5,8 @@ import 'repositories/car_report_repository.dart';
 import 'controllers/car_report_controller.dart';
 import 'controllers/auth_controller.dart';
 import 'controllers/theme_controller.dart';
+import 'controllers/localization_controller.dart';
+import 'localization/app_translations.dart';
 import 'db/db_helper.dart';
 import 'views/home_page.dart';
 
@@ -16,21 +18,31 @@ void main() async {
     Get.log('Firebase initialization error: $e');
   }
   
-  // Load saved theme key
+  // Load saved theme and language settings
   final dbHelper = DbHelper();
   final savedTheme = await dbHelper.getSetting('themeKey') ?? 'teal_dark';
+  final savedLang = await dbHelper.getSetting('languageCode') ?? 'gu';
   
-  runApp(CarInspectionApp(initialTheme: savedTheme));
+  runApp(CarInspectionApp(
+    initialTheme: savedTheme,
+    initialLanguage: savedLang,
+  ));
 }
 
 class CarInspectionApp extends StatelessWidget {
   final String initialTheme;
-  const CarInspectionApp({super.key, required this.initialTheme});
+  final String initialLanguage;
+  const CarInspectionApp({
+    super.key,
+    required this.initialTheme,
+    required this.initialLanguage,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Put ThemeController
+    // Put Controllers
     final themeController = Get.put(ThemeController(initialTheme: initialTheme));
+    final localizationController = Get.put(LocalizationController(initialLanguage: initialLanguage));
 
     return Obx(() => GetMaterialApp(
       title: 'Motexa',
@@ -41,6 +53,9 @@ class CarInspectionApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: themeController.currentThemeData,
       themeMode: themeController.currentThemeMode,
+      translations: AppTranslations(),
+      locale: localizationController.currentLocale,
+      fallbackLocale: const Locale('gu'),
       home: const SplashPage(),
     ));
   }

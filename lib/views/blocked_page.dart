@@ -27,24 +27,24 @@ class BlockedPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
             child: Obx(() {
               final reason = authController.blockedReason.value;
-              String title = 'એક્સેસ મર્યાદિત છે';
-              String message = 'કૃપા કરીને એડમિનિસ્ટ્રેટરનો સંપર્ક કરો.';
+              String title = 'એક્સેસ મર્યાદિત છે'.tr;
+              String message = 'કૃપા કરીને એડમિનિસ્ટ્રેટરનો સંપર્ક કરો.'.tr;
               IconData icon = Icons.lock_outline_rounded;
               Color iconColor = Colors.orangeAccent;
 
               if (reason == 'expired') {
-                title = 'સબ્સ્ક્રિપ્શન સમાપ્ત થઈ ગયું છે';
-                message = 'તમારી કંપનીનું સબ્સ્ક્રિપ્શન સમાપ્ત થઈ ગયું છે.\nકૃપા કરીને સુપર એડમિનનો સંપર્ક કરો.';
+                title = 'સબ્સ્ક્રિપ્શન સમાપ્ત થઈ ગયું છે'.tr;
+                message = 'તમારી કંપનીનું સબ્સ્ક્રિપ્શન સમાપ્ત થઈ ગયું છે.\nકૃપા કરીને સુપર એડમિનનો સંપર્ક કરો.'.tr;
                 icon = Icons.hourglass_disabled_rounded;
                 iconColor = Colors.redAccent;
               } else if (reason == 'deactivated') {
-                title = 'કંપની એકાઉન્ટ નિષ્ક્રિય છે';
-                message = 'તમારી કંપનીનું એકાઉન્ટ નિષ્ક્રિય કરવામાં આવ્યું છે.\nકૃપા કરીને સુપર એડમિનનો સંપર્ક કરો.';
+                title = 'કંપની એકાઉન્ટ નિષ્ક્રિય છે'.tr;
+                message = 'તમારી કંપનીનું એકાઉન્ટ નિષ્ક્રિય કરવામાં આવ્યું છે.\nકૃપા કરીને સુપર એડમિનનો સંપર્ક કરો.'.tr;
                 icon = Icons.block_flipped;
                 iconColor = Colors.redAccent;
               } else if (reason == 'offline_limit') {
-                title = 'ઓનલાઇન વેરિફિકેશન જરૂરી';
-                message = 'તમે છેલ્લા ૭ દિવસથી ઇન્ટરનેટ કનેક્ટ કર્યું નથી.\nએપ્લિકેશન ચાલુ રાખવા માટે કૃપા કરીને ઇન્ટરનેટ કનેક્ટ કરો.';
+                title = 'ઓનલાઇન વેરિફિકેશન જરૂરી'.tr;
+                message = 'તમે છેલ્લા ૭ દિવસથી ઇન્ટરનેટ કનેક્ટ કર્યું નથી.\nએપ્લિકેશન ચાલુ રાખવા માટે કૃપા કરીને ઇન્ટરનેટ કનેક્ટ કરો.'.tr;
                 icon = Icons.wifi_off_rounded;
                 iconColor = Colors.cyanAccent;
               }
@@ -118,9 +118,9 @@ class BlockedPage extends StatelessWidget {
                           }
                         },
                         icon: const Icon(Icons.refresh_rounded, color: Colors.white),
-                        label: const Text(
-                          'ફરી તપાસો (લોડ કરો)',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                        label: Text(
+                          'ફરી તપાસો (લોડ કરો)'.tr,
+                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.colorScheme.primary,
@@ -139,9 +139,9 @@ class BlockedPage extends StatelessWidget {
                       child: OutlinedButton.icon(
                         onPressed: () => authController.logout(),
                         icon: const Icon(Icons.logout_rounded, color: Colors.redAccent),
-                        label: const Text(
-                          'લૉગ આઉટ',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.redAccent),
+                        label: Text(
+                          'લૉગ આઉટ'.tr,
+                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.redAccent),
                         ),
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(color: Colors.redAccent, width: 1.5),

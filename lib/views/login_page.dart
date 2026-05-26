@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'ડીલર લોગિન સિસ્ટમ',
+                    'ડીલર લોગિન સિસ્ટમ'.tr,
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white.withOpacity(0.6),
@@ -115,9 +115,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'સાઇન ઇન',
-                            style: TextStyle(
+                          Text(
+                            'સાઇન ઇન'.tr,
+                            style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -131,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                             keyboardType: TextInputType.emailAddress,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
-                              labelText: 'ઇમેલ એડ્રેસ',
+                              labelText: 'ઇમેલ એડ્રેસ'.tr,
                               labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
                               prefixIcon: Icon(Icons.email_outlined, color: theme.colorScheme.primary),
                               enabledBorder: OutlineInputBorder(
@@ -155,10 +155,10 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return 'કૃપા કરીને ઇમેલ દાખલ કરો';
+                                return 'કૃપા કરીને ઇમેલ દાખલ કરો'.tr;
                               }
                               if (!GetUtils.isEmail(value.trim())) {
-                                return 'યોગ્ય ઇમેલ એડ્રેસ દાખલ કરો';
+                                return 'યોગ્ય ઇમેલ એડ્રેસ દાખલ કરો'.tr;
                               }
                               return null;
                             },
@@ -171,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                             obscureText: _obscurePassword,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
-                              labelText: 'પાસવર્ડ',
+                              labelText: 'પાસવર્ડ'.tr,
                               labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
                               prefixIcon: Icon(Icons.lock_outlined, color: theme.colorScheme.primary),
                               suffixIcon: IconButton(
@@ -206,10 +206,10 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return 'કૃપા કરીને પાસવર્ડ દાખલ કરો';
+                                return 'કૃપા કરીને પાસવર્ડ દાખલ કરો'.tr;
                               }
                               if (value.length < 6) {
-                                return 'પાસવર્ડ ઓછામાં ઓછો 6 અક્ષરનો હોવો જોઈએ';
+                                return 'પાસવર્ડ ઓછામાં ઓછો 6 અક્ષરનો હોવો જોઈએ'.tr;
                               }
                               return null;
                             },
@@ -225,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
                                       const SizedBox(width: 8),
                                       Expanded(
                                         child: Text(
-                                          authController.errorMessage.value,
+                                          authController.errorMessage.value.tr,
                                           style: const TextStyle(color: Colors.redAccent, fontSize: 13),
                                         ),
                                       ),
@@ -271,9 +271,9 @@ class _LoginPageState extends State<LoginPage> {
                                           color: Colors.white,
                                         ),
                                       )
-                                    : const Text(
-                                        'પ્રવેશ કરો',
-                                        style: TextStyle(
+                                    : Text(
+                                        'પ્રવેશ કરો'.tr,
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           letterSpacing: 0.5,

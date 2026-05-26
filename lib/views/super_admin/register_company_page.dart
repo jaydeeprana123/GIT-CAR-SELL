@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../services/auth_service.dart';
 
@@ -41,9 +42,9 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
       initialDate: _expiryDate,
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
-      helpText: 'સબ્સ્ક્રિપ્શન સમાપ્તિ તારીખ પસંદ કરો',
-      confirmText: 'નક્કી કરો',
-      cancelText: 'રદ કરો',
+      helpText: 'સબ્સ્ક્રિપ્શન સમાપ્તિ તારીખ પસંદ કરો'.tr,
+      confirmText: 'નક્કી કરો'.tr,
+      cancelText: 'રદ કરો'.tr,
     );
     if (picked != null && picked != _expiryDate) {
       setState(() {
@@ -73,7 +74,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('કંપની સફળતાપૂર્વક રજીસ્ટર થઈ ગઈ છે.')),
+          SnackBar(content: Text('કંપની સફળતાપૂર્વક રજીસ્ટર થઈ ગઈ છે.'.tr)),
         );
         Navigator.pop(context);
       }
@@ -81,7 +82,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(e.toString().replaceAll('Exception: ', '')),
+            content: Text(e.toString().replaceAll('Exception: ', '').tr),
             backgroundColor: Colors.redAccent,
           ),
         );
@@ -101,7 +102,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('નવી કંપની રજીસ્ટ્રેશન'),
+        title: Text('નવી કંપની રજીસ્ટ્રેશન'.tr),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -111,9 +112,9 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'કંપની અને એડમિન વિગતો',
-                  style: TextStyle(
+                Text(
+                  'કંપની અને એડમિન વિગતો'.tr,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -121,7 +122,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'બધી વિગતો સાચી ભરો જેથી એડમિન લોગીન આઈડી બની શકે.',
+                  'બધી વિગતો સાચી ભરો જેથી એડમિન લોગીન આઈડી બની શકે.'.tr,
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.white.withOpacity(0.6),
@@ -135,13 +136,13 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                   controller: _companyIdController,
                   textCapitalization: TextCapitalization.characters,
                   style: const TextStyle(color: Colors.white),
-                  decoration: _buildInputDecoration('કંપની ID (દા.ત. COMP001)', Icons.badge_outlined, theme),
+                  decoration: _buildInputDecoration('કંપની ID (દા.ત. COMP001)'.tr, Icons.badge_outlined, theme),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'કૃપા કરીને કંપની ID દાખલ કરો';
+                      return 'કૃપા કરીને કંપની ID દાખલ કરો'.tr;
                     }
                     if (value.trim().length < 3) {
-                      return 'કંપની ID ઓછામાં ઓછો 3 અક્ષરનો હોવો જોઈએ';
+                      return 'કંપની ID ઓછામાં ઓછો 3 અક્ષરનો હોવો જોઈએ'.tr;
                     }
                     return null;
                   },
@@ -153,10 +154,10 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                 TextFormField(
                   controller: _companyNameController,
                   style: const TextStyle(color: Colors.white),
-                  decoration: _buildInputDecoration('કંપનીનું નામ', Icons.business_rounded, theme),
+                  decoration: _buildInputDecoration('કંપનીનું નામ'.tr, Icons.business_rounded, theme),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'કૃપા કરીને કંપનીનું નામ દાખલ કરો';
+                      return 'કૃપા કરીને કંપનીનું નામ દાખલ કરો'.tr;
                     }
                     return null;
                   },
@@ -168,10 +169,10 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                 TextFormField(
                   controller: _ownerNameController,
                   style: const TextStyle(color: Colors.white),
-                  decoration: _buildInputDecoration('ઓનરનું નામ', Icons.person_outline_rounded, theme),
+                  decoration: _buildInputDecoration('ઓનરનું નામ'.tr, Icons.person_outline_rounded, theme),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'કૃપા કરીને ઓનરનું નામ દાખલ કરો';
+                      return 'કૃપા કરીને ઓનરનું નામ દાખલ કરો'.tr;
                     }
                     return null;
                   },
@@ -184,13 +185,13 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   style: const TextStyle(color: Colors.white),
-                  decoration: _buildInputDecoration('એડમિન ઇમેલ એડ્રેસ', Icons.email_outlined, theme),
+                  decoration: _buildInputDecoration('એડમિન ઇમેલ એડ્રેસ'.tr, Icons.email_outlined, theme),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'કૃપા કરીને ઇમેલ દાખલ કરો';
+                      return 'કૃપા કરીને ઇમેલ દાખલ કરો'.tr;
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value.trim())) {
-                      return 'કૃપા કરીને સાચો ઇમેલ દાખલ કરો';
+                      return 'કૃપા કરીને સાચો ઇમેલ દાખલ કરો'.tr;
                     }
                     return null;
                   },
@@ -204,7 +205,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                   obscureText: _obscurePassword,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
-                    labelText: 'એડમિન પાસવર્ડ',
+                    labelText: 'એડમિન પાસવર્ડ'.tr,
                     labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
                     prefixIcon: Icon(Icons.lock_outlined, color: theme.colorScheme.primary),
                     suffixIcon: IconButton(
@@ -239,10 +240,10 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'કૃપા કરીને પાસવર્ડ દાખલ કરો';
+                      return 'કૃપા કરીને પાસવર્ડ દાખલ કરો'.tr;
                     }
                     if (value.trim().length < 6) {
-                      return 'પાસવર્ડ ઓછામાં ઓછો 6 અક્ષરનો હોવો જોઈએ';
+                      return 'પાસવર્ડ ઓછામાં ઓછો 6 અક્ષરનો હોવો જોઈએ'.tr;
                     }
                     return null;
                   },
@@ -251,9 +252,9 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                 const SizedBox(height: 24),
 
                 // Purchase Scheme Selector
-                const Text(
-                  'પર્ચેઝ સ્કીમ (Purchase Scheme)',
-                  style: TextStyle(
+                Text(
+                  'પર્ચેઝ સ્કીમ (Purchase Scheme)'.tr,
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -281,14 +282,14 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                           });
                         }
                       },
-                      items: const [
+                      items: [
                         DropdownMenuItem(
                           value: 'offline',
-                          child: Text('ઓફલાઇન (Offline)'),
+                          child: Text('ઓફલાઇન (Offline)'.tr),
                         ),
                         DropdownMenuItem(
                           value: 'online',
-                          child: Text('ઓનલાઇન (Online)'),
+                          child: Text('ઓનલાઇન (Online)'.tr),
                         ),
                       ],
                     ),
@@ -298,9 +299,9 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                 const SizedBox(height: 24),
 
                 // Subscription Expiry Selector
-                const Text(
-                  'સબ્સ્ક્રિપ્શન સમાપ્તિ તારીખ',
-                  style: TextStyle(
+                Text(
+                  'સબ્સ્ક્રિપ્શન સમાપ્તિ તારીખ'.tr,
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -363,9 +364,9 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                               color: Colors.white,
                             ),
                           )
-                        : const Text(
-                            'કંપની રજીસ્ટર કરો',
-                            style: TextStyle(
+                        : Text(
+                            'કંપની રજીસ્ટર કરો'.tr,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 0.5,

@@ -238,9 +238,9 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                             color: step2Completed ? Colors.white : theme.colorScheme.primary,
                           ),
                         ),
-                        title: const Text(
-                          'પગલું ૨: ગાડીના ફોટા મોકલો',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        title: Text(
+                          'પગલું ૨: ગાડીના ફોટા મોકલો'.tr,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         trailing: isModalSharing
                             ? const SizedBox(
@@ -261,7 +261,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                                         } catch (e) {
                                           if (mounted) {
                                             ScaffoldMessenger.of(context).showSnackBar(
-                                              SnackBar(content: Text('શેર કરવામાં નિષ્ફળતા: $e')),
+                                              SnackBar(content: Text('${'શેર કરવામાં નિષ્ફળતા:'.tr} $e')),
                                             );
                                           }
                                         } finally {
@@ -272,7 +272,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                                   backgroundColor: step2Completed ? Colors.grey : Colors.green,
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                 ),
-                                child: Text(step2Completed ? 'ફરી મોકલો' : 'મોકલો'),
+                                child: Text(step2Completed ? 'ફરી મોકલો'.tr : 'મોકલો'.tr),
                               ),
                       ),
                     ),
@@ -285,7 +285,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
-                        child: const Text('પૂર્ણ (Done)'),
+                        child: Text('પૂર્ણ (Done)'.tr),
                       ),
                     ),
                   ],
@@ -316,7 +316,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                     ),
                   ),
                   Text(
-                    'રિપોર્ટ શેર કરો',
+                    'રિપોર્ટ શેર કરો'.tr,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -325,7 +325,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'શેર કરવાની રીત પસંદ કરો',
+                    'શેર કરવાની રીત પસંદ કરો'.tr,
                     style: TextStyle(
                       fontSize: 12,
                       color: theme.colorScheme.primary,
@@ -344,11 +344,11 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                       ),
                       child: const Icon(Icons.chat, color: Colors.green),
                     ),
-                    title: const Text(
-                      'વોટ્સએપ પર મોકલો (PDF અને ફોટા)',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    title: Text(
+                      'વોટ્સએપ પર મોકલો (PDF અને ફોટા)'.tr,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle: const Text('પીડીએફ રીપોર્ટ અને ગાડીના ફોટા બંને મોકલાશે.'),
+                    subtitle: Text('પીડીએફ રીપોર્ટ અને ગાડીના ફોટા બંને મોકલાશે.'.tr),
                     onTap: () {
                       if (_report!.images.isEmpty) {
                         Navigator.pop(context);
@@ -371,11 +371,11 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                       ),
                       child: const Icon(Icons.email, color: Colors.blue),
                     ),
-                    title: const Text(
-                      'ઇમેઇલ પર મોકલો (PDF + ફોટા એકસાથે)',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    title: Text(
+                      'ઇમેઇલ પર મોકલો (PDF + ફોટા એકસાથે)'.tr,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle: const Text('ઇમેઇલમાં પીડીએફ અને ફોટા એક સાથે અટેચ થશે.'),
+                    subtitle: Text('ઇમેઇલમાં પીડીએફ અને ફોટા એક સાથે અટેચ થશે.'.tr),
                     onTap: () {
                       Navigator.pop(context);
                       _sharePdfDirectly('mixed', quotationPrice: quotationPrice);
@@ -392,11 +392,11 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                       ),
                       child: const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
                     ),
-                    title: const Text(
-                      'ફક્ત PDF રીપોર્ટ મોકલો',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    title: Text(
+                      'ફક્ત PDF રીપોર્ટ મોકલો'.tr,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle: const Text('માત્ર પીડીએફ રીપોર્ટ જ મોકલાશે.'),
+                    subtitle: Text('માત્ર પીડીએફ રીપોર્ટ જ મોકલાશે.'.tr),
                     onTap: () {
                       Navigator.pop(context);
                       _sharePdfDirectly('pdf_only', quotationPrice: quotationPrice);
@@ -418,7 +418,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('PDF શેર કરવામાં નિષ્ફળતા: $e')),
+          SnackBar(content: Text('${'PDF શેર કરવામાં નિષ્ફળતા:'.tr} $e')),
         );
       }
     } finally {
@@ -434,17 +434,17 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('ડિલીટ કરો?'),
-        content: const Text('શું તમે ખરેખર આ રિપોર્ટ કાઢી નાખવા માંગો છો?'),
+        title: Text('ડિલીટ કરો?'.tr),
+        content: Text('શું તમે ખરેખર આ રિપોર્ટ કાઢી નાખવા માંગો છો?'.tr),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('ના', style: TextStyle(color: Colors.grey)),
+            child: Text('ના'.tr, style: const TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-            child: const Text('હા, ડિલીટ', style: TextStyle(color: Colors.white)),
+            child: Text('હા, ડિલીટ'.tr, style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -455,7 +455,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
       final success = await controller.deleteReportData(_report!.id!);
       if (success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('રિપોર્ટ ડિલીટ કરાયો છે')),
+          SnackBar(content: Text('રિપોર્ટ ડિલીટ કરાયો છે'.tr)),
         );
         Navigator.pop(context, true);
       }
@@ -472,8 +472,8 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
 
     if (_report == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text('રિપોર્ટ વિગતો')),
-        body: const Center(child: Text('રિપોર્ટ મળ્યો નથી')),
+        appBar: AppBar(title: Text('રિપોર્ટ વિગતો'.tr)),
+        body: Center(child: Text('રિપોર્ટ મળ્યો નથી'.tr)),
       );
     }
 
@@ -509,9 +509,9 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
 
                 // Attached Images slider
                 if (report.images.isNotEmpty) ...[
-                  const Text(
-                    'અટેચ કરેલ ફોટા',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  Text(
+                    'અટેચ કરેલ ફોટા'.tr,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   _buildImageSlider(report.images),
@@ -520,55 +520,55 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
 
                 // Checklists
                 _buildCategorySection(
-                  title: '૧. બોડી અને બહારનો ભાગ (Exterior Check)',
+                  title: '૧. બોડી અને બહારનો ભાગ (Exterior Check)'.tr,
                   icon: Icons.directions_car,
                   items: [
-                    _buildDetailRow('૧ થાંભલી (Pillar 1)', report.bodyDent1),
-                    _buildDetailRow('૨ થાંભલી (Pillar 2)', report.bodyDent2),
-                    _buildDetailRow('૩ થાંભલી (Pillar 3)', report.bodyDent3),
-                    _buildDetailRow('૪ થાંભલી (Pillar 4)', report.bodyDent4),
-                    _buildDetailRow('ડેકી (Dickey)', report.dickey),
-                    _buildDetailRow('૧ દરવાજો (Door 1)', report.door1),
-                    _buildDetailRow('૨ દરવાજો (Door 2)', report.door2),
-                    _buildDetailRow('૩ દરવાજો (Door 3)', report.door3),
-                    _buildDetailRow('૪ દરવાજો (Door 4)', report.door4),
-                    _buildDetailRow('કાચ ૧ (Glass 1)', report.glass1),
-                    _buildDetailRow('કાચ ૨ (Glass 2)', report.glass2),
-                    _buildDetailRow('કાચ ૩ (Glass 3)', report.glass3),
-                    _buildDetailRow('કાચ ૪ (Glass 4)', report.glass4),
-                    _buildDetailRow('ફેન્ડર ૧ ડ્રાઇવ (Fender Driver)', report.fenderDriver),
-                    _buildDetailRow('ફેન્ડર ૨ ખાલી (Fender Passenger)', report.fenderPassenger),
-                    _buildDetailRow('બોનેટ ૧ અંદરથી (Bonnet Inside)', report.bonnetInside),
-                    _buildDetailRow('બોનેટ ૨ ઉપરથી (Bonnet Outside)', report.bonnetOutside),
-                    _buildDetailRow('ગાડીમાં ટચઅપ', report.touchup.isEmpty ? 'નથી' : report.touchup),
+                    _buildDetailRow('૧ થાંભલી (Pillar 1)'.tr, report.bodyDent1),
+                    _buildDetailRow('૨ થાંભલી (Pillar 2)'.tr, report.bodyDent2),
+                    _buildDetailRow('૩ થાંભલી (Pillar 3)'.tr, report.bodyDent3),
+                    _buildDetailRow('૪ થાંભલી (Pillar 4)'.tr, report.bodyDent4),
+                    _buildDetailRow('ડેકી (Dickey)'.tr, report.dickey),
+                    _buildDetailRow('૧ દરવાજો (Door 1)'.tr, report.door1),
+                    _buildDetailRow('૨ દરવાજો (Door 2)'.tr, report.door2),
+                    _buildDetailRow('૩ દરવાજો (Door 3)'.tr, report.door3),
+                    _buildDetailRow('૪ દરવાજો (Door 4)'.tr, report.door4),
+                    _buildDetailRow('કાચ ૧ (Glass 1)'.tr, report.glass1),
+                    _buildDetailRow('કાચ ૨ (Glass 2)'.tr, report.glass2),
+                    _buildDetailRow('કાચ ૩ (Glass 3)'.tr, report.glass3),
+                    _buildDetailRow('કાચ ૪ (Glass 4)'.tr, report.glass4),
+                    _buildDetailRow('ફેન્ડર ૧ ડ્રાઇવ (Fender Driver)'.tr, report.fenderDriver),
+                    _buildDetailRow('ફેન્ડર ૨ ખાલી (Fender Passenger)'.tr, report.fenderPassenger),
+                    _buildDetailRow('બોનેટ ૧ અંદરથી (Bonnet Inside)'.tr, report.bonnetInside),
+                    _buildDetailRow('બોનેટ ૨ ઉપરથી (Bonnet Outside)'.tr, report.bonnetOutside),
+                    _buildDetailRow('ગાડીમાં ટચઅપ'.tr, report.touchup.isEmpty ? 'નથી'.tr : report.touchup),
                   ],
                 ),
                 const SizedBox(height: 16),
 
                 _buildCategorySection(
-                  title: '૨. મિકેનિકલ અને એન્જિન (Engine Check)',
+                  title: '૨. મિકેનિકલ અને એન્જિન (Engine Check)'.tr,
                   icon: Icons.construction,
                   items: [
-                    _buildDetailRow('એન્જિન લાઇન (Engine Line)', report.engineLine.isEmpty ? 'N/A' : report.engineLine),
-                    _buildDetailRow('એન્જિન ઓઇલ ચેક (Oil Check)', report.engineOilCheck),
-                    _buildDetailRow('એન્જિન ધુમાડો (Engine Smoke)', report.engineSmoke),
-                    _buildDetailRow('એન્જિન અવાજ (Engine Noise)', report.engineNoise),
-                    _buildDetailRow('ગાડી ચાલુ કરવામાં (Starting)', report.startingCondition),
+                    _buildDetailRow('એન્જિન લાઇન (Engine Line)'.tr, report.engineLine.isEmpty ? 'N/A' : report.engineLine),
+                    _buildDetailRow('એન્જિન ઓઇલ ચેક (Oil Check)'.tr, report.engineOilCheck),
+                    _buildDetailRow('એન્જિન ધુમાડો (Engine Smoke)'.tr, report.engineSmoke),
+                    _buildDetailRow('એન્જિન અવાજ (Engine Noise)'.tr, report.engineNoise),
+                    _buildDetailRow('ગાડી ચાલુ કરવામાં (Starting)'.tr, report.startingCondition),
                   ],
                 ),
                 const SizedBox(height: 16),
 
                 _buildCategorySection(
-                  title: '૩. ડ્રાઇવિંગ અને કેબિન (Cabin & Driving)',
+                  title: '૩. ડ્રાઇવિંગ અને કેબિન (Cabin & Driving)'.tr,
                   icon: Icons.alt_route,
                   items: [
-                    _buildDetailRow('AC (એસી)', report.ac),
-                    _buildDetailRow('ઇન્ટિરિયર (Interior)', report.interior),
-                    _buildDetailRow('ચાલવામાં (Driving)', report.drivingCondition.isEmpty ? 'N/A' : report.drivingCondition),
-                    _buildDetailRow('સસ્પેન્સ (Suspension)', report.suspension),
-                    _buildDetailRow('પીકઅપ (Pickup)', report.pickup),
-                    _buildDetailRow('બ્રેક (Brake)', report.brake),
-                    _buildDetailRow('ગેર (Gear)', report.gear),
+                    _buildDetailRow('AC (એસી)'.tr, report.ac),
+                    _buildDetailRow('ઇન્ટિરિયર (Interior)'.tr, report.interior),
+                    _buildDetailRow('ચાલવામાં (Driving)'.tr, report.drivingCondition.isEmpty ? 'N/A' : report.drivingCondition),
+                    _buildDetailRow('સસ્પેન્સ (Suspension)'.tr, report.suspension),
+                    _buildDetailRow('પીકઅપ (Pickup)'.tr, report.pickup),
+                    _buildDetailRow('બ્રેક (Brake)'.tr, report.brake),
+                    _buildDetailRow('ગેર (Gear)'.tr, report.gear),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -631,9 +631,9 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildHeaderMetric(Icons.person, 'ઓનર', report.owner),
-              _buildHeaderMetric(Icons.speed, 'કિલોમીટર', '${report.kilometers} km'),
-              _buildHeaderMetric(Icons.security, 'વીમો (Vimo)', report.vimo),
+              _buildHeaderMetric(Icons.person, 'ઓનર'.tr, report.owner),
+              _buildHeaderMetric(Icons.speed, 'કિલોમીટર'.tr, '${report.kilometers} km'),
+              _buildHeaderMetric(Icons.security, 'વીમો (Vimo)'.tr, report.vimo),
             ],
           ),
         ],
@@ -643,8 +643,8 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
 
   Widget _buildOwnerInfoCard(CarReport report) {
     final theme = Theme.of(context);
-    final name = report.ownerName.isEmpty ? 'નથી ભરેલ' : report.ownerName;
-    final mobile = report.ownerMobile.isEmpty ? 'નથી ભરેલ' : report.ownerMobile;
+    final name = report.ownerName.isEmpty ? 'નથી ભરેલ'.tr : report.ownerName;
+    final mobile = report.ownerMobile.isEmpty ? 'નથી ભરેલ'.tr : report.ownerMobile;
 
     return Card(
       color: theme.cardColor,
@@ -659,9 +659,9 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
               children: [
                 Icon(Icons.info_outline, color: theme.colorScheme.primary, size: 20),
                 const SizedBox(width: 8),
-                const Text(
-                  'માલિકની માહિતી (આંતરિક માહિતી)',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                Text(
+                  'માલિકની માહિતી (આંતરિક માહિતી)'.tr,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ],
             ),
@@ -672,7 +672,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'માલિકનું નામ:',
+                  'માલિકનું નામ:'.tr,
                   style: TextStyle(color: theme.hintColor, fontSize: 14),
                 ),
                 Text(
@@ -686,7 +686,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'મોબાઈલ નંબર:',
+                  'મોબાઈલ નંબર:'.tr,
                   style: TextStyle(color: theme.hintColor, fontSize: 14),
                 ),
                 GestureDetector(
@@ -695,7 +695,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                       : () {
                           Clipboard.setData(ClipboardData(text: report.ownerMobile));
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('મોબાઈલ નંબર ક્લિપબોર્ડ પર કોપી કર્યો છે')),
+                            SnackBar(content: Text('મોબાઈલ નંબર ક્લિપબોર્ડ પર કોપી કર્યો છે'.tr)),
                           );
                         },
                   child: Row(
@@ -872,7 +872,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
             style: TextStyle(color: theme.hintColor, fontSize: 14),
           ),
           Text(
-            value.isEmpty ? 'N/A' : value,
+            value.isEmpty ? 'N/A' : value.tr,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
@@ -905,7 +905,7 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
                     )
                   : const Icon(Icons.share, color: Colors.white),
               label: Text(
-                _isSharing ? 'રિપોર્ટ બને છે...' : 'વોટ્સએપ / ઈમેલ પર મોકલો (PDF)',
+                _isSharing ? 'રિપોર્ટ બને છે...'.tr : 'વોટ્સએપ / ઈમેલ પર મોકલો (PDF)'.tr,
                 style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(

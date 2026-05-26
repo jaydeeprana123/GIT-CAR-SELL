@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/theme_controller.dart';
+import '../controllers/localization_controller.dart';
 import 'staff_management_page.dart';
 import 'earnings_report_page.dart';
 
@@ -143,9 +144,19 @@ class SettingsPage extends StatelessWidget {
           _buildSettingsTile(
             context: context,
             icon: Icons.color_lens_outlined,
-            title: 'થીમ સેટિંગ્સ (Theme Settings)',
-            subtitle: 'લાઇટ અને ડાર્ક કલર થીમ પસંદ કરો',
+            title: 'થીમ સેટિંગ્સ (Theme Settings)'.tr,
+            subtitle: 'લાઇટ અને ડાર્ક કલર થીમ પસંદ કરો'.tr,
             onTap: () => _showThemeSelector(context),
+          ),
+          const SizedBox(height: 12),
+
+          // Language Selector Tile (Visible to everyone)
+          _buildSettingsTile(
+            context: context,
+            icon: Icons.language_outlined,
+            title: 'ભાષા સેટિંગ્સ (Language Settings)'.tr,
+            subtitle: 'ગુજરાતી, English, हिन्दी પસંદ કરો'.tr,
+            onTap: () => _showLanguageSelector(context),
           ),
           const SizedBox(height: 32),
 
@@ -308,6 +319,86 @@ class SettingsPage extends StatelessWidget {
             ? Icon(Icons.check_circle, color: colorIndicator, size: 20)
             : null,
         onTap: () => themeController.changeTheme(key),
+      ),
+    );
+  }
+
+  void _showLanguageSelector(BuildContext context) {
+    final localizationController = Get.find<LocalizationController>();
+    
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            'ભાષા પસંદ કરો'.tr, 
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          content: Obx(() {
+            final currentLang = localizationController.currentLanguageCode.value;
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildLanguageOption(context, 'gu', 'ગુજરાતી', currentLang, localizationController),
+                _buildLanguageOption(context, 'en', 'English', currentLang, localizationController),
+                _buildLanguageOption(context, 'hi', 'हिन्दी', currentLang, localizationController),
+              ],
+            );
+          }),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('બંધ કરો (Close)'.tr),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildLanguageOption(
+    BuildContext context,
+    String code,
+    String label,
+    String currentCode,
+    LocalizationController localizationController,
+  ) {
+    final theme = Theme.of(context);
+    final isSelected = code == currentCode;
+    final primaryColor = theme.colorScheme.primary;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: isSelected ? primaryColor.withOpacity(0.08) : Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isSelected ? primaryColor : Colors.transparent,
+          width: 1,
+        ),
+      ),
+      child: ListTile(
+        visualDensity: VisualDensity.compact,
+        leading: Icon(
+          Icons.language_outlined, 
+          color: isSelected ? primaryColor : theme.hintColor,
+          size: 20,
+        ),
+        title: Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            color: isSelected ? primaryColor : theme.textTheme.bodyLarge?.color,
+          ),
+        ),
+        trailing: isSelected
+            ? Icon(Icons.check_circle, color: primaryColor, size: 20)
+            : null,
+        onTap: () {
+          localizationController.changeLanguage(code);
+          Navigator.pop(context);
+        },
       ),
     );
   }

@@ -99,9 +99,9 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
       ),
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now().add(const Duration(days: 1)),
-      confirmText: 'પસંદ કરો',
-      saveText: 'સાચવો',
-      helpText: 'તારીખગાળો પસંદ કરો',
+      confirmText: 'પસંદ કરો'.tr,
+      saveText: 'સાચવો'.tr,
+      helpText: 'તારીખગાળો પસંદ કરો'.tr,
     );
 
     if (picked != null) {
@@ -117,7 +117,7 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
     final filtered = _getFilteredReports();
     if (filtered.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('નિકાસ કરવા માટે કોઈ વેચાણ રેકોર્ડ ઉપલબ્ધ નથી.')),
+        SnackBar(content: Text('નિકાસ કરવા માટે કોઈ વેચાણ રેકોર્ડ ઉપલબ્ધ નથી.'.tr)),
       );
       return;
     }
@@ -125,7 +125,7 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
     try {
       StringBuffer sb = StringBuffer();
       // Write headers
-      sb.writeln('Model (મોડેલ),Owner (ઓનર),Kilometers (કિલોમીટર),Sold Price (વેચાણ કિંમત),Sold Date (વેચાણ તારીખ),Customer Name (ગ્રાહકનું નામ),Customer Mobile (ગ્રાહકનો મોબાઇલ),Customer Address (સરનામું),Remarks (નોંધ)');
+      sb.writeln('Model (મોડેલ),Owner (ઓનર),Kilometers (કિલોમીટર),Sold Price (વેચાણ કિંમત),Sold Date (વેચાણ તારીખ),Customer Name (ગ્રાહકનું નામ),Customer Mobile (ગ્રાહકનો મોબાઇલ),Customer Address (સરનામું),Remarks (નોંધ)'.tr);
       
       for (var r in filtered) {
         final model = r.model.replaceAll('"', '""');
@@ -156,7 +156,7 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('CSV શેર કરવામાં નિષ્ફળતા: $e'), backgroundColor: Colors.redAccent),
+        SnackBar(content: Text('${'CSV શેર કરવામાં નિષ્ફળતા:'.tr} $e'), backgroundColor: Colors.redAccent),
       );
     }
   }
@@ -172,11 +172,11 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('કમાણીનો અહેવાલ'),
+        title: Text('કમાણીનો અહેવાલ'.tr),
         actions: [
           IconButton(
             icon: const Icon(Icons.download_rounded),
-            tooltip: 'CSV નિકાસ કરો',
+            tooltip: 'CSV નિકાસ કરો'.tr,
             onPressed: _exportToCsv,
           ),
         ],
@@ -191,13 +191,13 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _buildFilterChip('today', 'આજે (Today)'),
+                  _buildFilterChip('today', 'આજે (Today)'.tr),
                   const SizedBox(width: 8),
-                  _buildFilterChip('week', 'આ અઠવાડિયે'),
+                  _buildFilterChip('week', 'આ અઠવાડિયે'.tr),
                   const SizedBox(width: 8),
-                  _buildFilterChip('month', 'આ મહિને (Month)'),
+                  _buildFilterChip('month', 'આ મહિને (Month)'.tr),
                   const SizedBox(width: 8),
-                  _buildFilterChip('custom', 'તારીખ પસંદ કરો...'),
+                  _buildFilterChip('custom', 'તારીખ પસંદ કરો...'.tr),
                 ],
               ),
             ),
@@ -211,13 +211,13 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'તારીખગાળો: ${DateFormat('dd-MM-yyyy').format(_customDateRange!.start)} થી ${DateFormat('dd-MM-yyyy').format(_customDateRange!.end)}',
+                    "${'તારીખગાળો:'.tr} ${DateFormat('dd-MM-yyyy').format(_customDateRange!.start)} ${'થી'.tr} ${DateFormat('dd-MM-yyyy').format(_customDateRange!.end)}",
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: theme.colorScheme.primary),
                   ),
                   TextButton.icon(
                     onPressed: _selectCustomDateRange,
                     icon: const Icon(Icons.edit, size: 14),
-                    label: const Text('બદલો', style: TextStyle(fontSize: 12)),
+                    label: Text('બદલો'.tr, style: const TextStyle(fontSize: 12)),
                   ),
                 ],
               ),
@@ -231,9 +231,9 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
                 _buildMetricsDashboard(metrics, theme, accentColor),
                 const SizedBox(height: 24),
 
-                const Text(
-                  'વેચાણ યાદી (Filtered Sales List)',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
+                Text(
+                  'વેચાણ યાદી (Filtered Sales List)'.tr,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey),
                 ),
                 const SizedBox(height: 12),
 
@@ -291,7 +291,7 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
           children: [
             Expanded(
               child: _buildMetricCard(
-                label: 'વેચેલ ગાડીઓ',
+                label: 'વેચેલ ગાડીઓ'.tr,
                 value: '${metrics['totalCars']}',
                 icon: Icons.directions_car,
                 color: theme.colorScheme.primary,
@@ -301,7 +301,7 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
             const SizedBox(width: 12),
             Expanded(
               child: _buildMetricCard(
-                label: 'કુલ વેચાણ રકમ',
+                label: 'કુલ વેચાણ રકમ'.tr,
                 value: _formatCurrency(metrics['totalAmount']),
                 icon: Icons.currency_rupee,
                 color: theme.colorScheme.secondary,
@@ -312,7 +312,7 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
         ),
         const SizedBox(height: 12),
         _buildMetricCard(
-          label: 'કુલ નફો / અંદાજિત કમાણી',
+          label: 'કુલ નફો / અંદાજિત કમાણી'.tr,
           value: _formatCurrency(metrics['totalProfit']),
           icon: Icons.trending_up,
           color: accentColor,
@@ -323,7 +323,7 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Text(
-            'નોંધ: ખરીદ કિંમત (Cost Price) ઉપલબ્ધ ન હોવાથી કમાણી વેચાણ કિંમત સમાન ગણવામાં આવેલ છે.',
+            'નોંધ: ખરીદ કિંમત (Cost Price) ઉપલબ્ધ ન હોવાથી કમાણી વેચાણ કિંમત સમાન ગણવામાં આવેલ છે.'.tr,
             style: TextStyle(fontSize: 10, color: theme.hintColor, fontStyle: FontStyle.italic),
             textAlign: TextAlign.center,
           ),
@@ -409,7 +409,7 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'ગ્રાહક: ${report.customerName ?? 'N/A'} | તારીખ: ${report.soldDate ?? ''}',
+                  "${'ગ્રાહક:'.tr} ${report.customerName ?? 'N/A'} | ${'તારીખ:'.tr} ${report.soldDate ?? ''}",
                   style: TextStyle(fontSize: 11, color: theme.hintColor),
                 ),
               ],
@@ -432,9 +432,9 @@ class _EarningsReportPageState extends State<EarningsReportPage> {
           children: [
             Icon(Icons.query_stats, size: 50, color: Colors.grey.withOpacity(0.3)),
             const SizedBox(height: 12),
-            const Text(
-              'પસંદ કરેલ તારીખગાળામાં કોઈ વેચાણ મળ્યું નથી',
-              style: TextStyle(fontSize: 13, color: Colors.grey),
+            Text(
+              'પસંદ કરેલ તારીખગાળામાં કોઈ વેચાણ મળ્યું નથી'.tr,
+              style: const TextStyle(fontSize: 13, color: Colors.grey),
             ),
           ],
         ),
