@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.innies" "\0"
-            VALUE "FileDescription", "car_sell" "\0"
+            VALUE "FileDescription", "Motexa" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "car_sell" "\0"
+            VALUE "InternalName", "Motexa" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.innies. All rights reserved." "\0"
             VALUE "OriginalFilename", "car_sell.exe" "\0"
-            VALUE "ProductName", "car_sell" "\0"
+            VALUE "ProductName", "Motexa" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

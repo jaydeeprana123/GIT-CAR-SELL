@@ -31,10 +31,15 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              theme.colorScheme.background,
-              const Color(0xFF020617), // Deepest dark
-            ],
+            colors: theme.brightness == Brightness.light
+                ? [
+                    const Color(0xFFF1F5F9), // Light grey
+                    const Color(0xFFE2E8F0), // Medium light grey
+                  ]
+                : [
+                    theme.colorScheme.background,
+                    const Color(0xFF020617),
+                  ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -71,13 +76,13 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
+                  Text(
                     'Motexa',
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
-                      color: Colors.white,
+                      color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -85,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                     'ડીલર લોગિન સિસ્ટમ'.tr,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.white.withOpacity(0.6),
+                      color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white.withOpacity(0.6),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -99,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: theme.cardColor.withOpacity(0.6),
                       borderRadius: BorderRadius.circular(28),
                       border: Border.all(
-                        color: Colors.white.withOpacity(0.08),
+                        color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.08) : Colors.white.withOpacity(0.08),
                         width: 1.5,
                       ),
                       boxShadow: [
@@ -117,10 +122,10 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           Text(
                             'સાઇન ઇન'.tr,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white,
                             ),
                           ),
                           const SizedBox(height: 20),
@@ -129,14 +134,14 @@ class _LoginPageState extends State<LoginPage> {
                           TextFormField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
-                            style: const TextStyle(color: Colors.white),
+                            style: TextStyle(color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white),
                             decoration: InputDecoration(
                               labelText: 'ઇમેલ એડ્રેસ'.tr,
-                              labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+                              labelStyle: TextStyle(color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white.withOpacity(0.6)),
                               prefixIcon: Icon(Icons.email_outlined, color: theme.colorScheme.primary),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
-                                borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                                borderSide: BorderSide(color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.1) : Colors.white.withOpacity(0.1)),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
@@ -151,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                                 borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
                               ),
                               filled: true,
-                              fillColor: Colors.black.withOpacity(0.2),
+                              fillColor: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.04) : Colors.black.withOpacity(0.2),
                             ),
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
@@ -169,15 +174,15 @@ class _LoginPageState extends State<LoginPage> {
                           TextFormField(
                             controller: _passwordController,
                             obscureText: _obscurePassword,
-                            style: const TextStyle(color: Colors.white),
+                            style: TextStyle(color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white),
                             decoration: InputDecoration(
                               labelText: 'પાસવર્ડ'.tr,
-                              labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+                              labelStyle: TextStyle(color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white.withOpacity(0.6)),
                               prefixIcon: Icon(Icons.lock_outlined, color: theme.colorScheme.primary),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                                  color: Colors.white.withOpacity(0.6),
+                                  color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white.withOpacity(0.6),
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -187,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
-                                borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                                borderSide: BorderSide(color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.1) : Colors.white.withOpacity(0.1)),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
@@ -202,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                                 borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
                               ),
                               filled: true,
-                              fillColor: Colors.black.withOpacity(0.2),
+                              fillColor: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.04) : Colors.black.withOpacity(0.2),
                             ),
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {

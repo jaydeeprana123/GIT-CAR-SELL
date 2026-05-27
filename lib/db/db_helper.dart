@@ -22,10 +22,9 @@ class DbHelper {
 
     return await openDatabase(
       path,
-      version: 4,
+      version: 1,
       onCreate: _onCreate,
       onConfigure: _onConfigure,
-      onUpgrade: _onUpgrade,
     );
   }
 
@@ -34,29 +33,7 @@ class DbHelper {
     await db.execute('PRAGMA foreign_keys = ON');
   }
 
-  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
-      await db.execute('ALTER TABLE car_reports ADD COLUMN owner_name TEXT');
-      await db.execute('ALTER TABLE car_reports ADD COLUMN owner_mobile TEXT');
-    }
-    if (oldVersion < 3) {
-      await db.execute('''
-        CREATE TABLE app_settings (
-          key TEXT PRIMARY KEY,
-          value TEXT
-        )
-      ''');
-    }
-    if (oldVersion < 4) {
-      await db.execute("ALTER TABLE car_reports ADD COLUMN status TEXT DEFAULT 'unsold'");
-      await db.execute("ALTER TABLE car_reports ADD COLUMN customer_name TEXT");
-      await db.execute("ALTER TABLE car_reports ADD COLUMN customer_mobile TEXT");
-      await db.execute("ALTER TABLE car_reports ADD COLUMN customer_address TEXT");
-      await db.execute("ALTER TABLE car_reports ADD COLUMN sold_price TEXT");
-      await db.execute("ALTER TABLE car_reports ADD COLUMN sold_date TEXT");
-      await db.execute("ALTER TABLE car_reports ADD COLUMN remarks TEXT");
-    }
-  }
+
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''

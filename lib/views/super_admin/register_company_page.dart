@@ -1,3 +1,5 @@
+import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +26,38 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
   String _purchaseScheme = 'offline'; // 'online' or 'offline'
   bool _isLoading = false;
   bool _obscurePassword = true;
+  String _initialSuggestedId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initialSuggestedId = _generateRandomCompanyId();
+    _companyIdController.text = _initialSuggestedId;
+    _suggestCompanyId();
+  }
+
+  String _generateRandomCompanyId() {
+    final random = Random();
+    final number = random.nextInt(9000) + 1000; // 1000 to 9999
+    return 'COMP$number';
+  }
+
+  Future<void> _suggestCompanyId() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance.collection('companies').get();
+      final count = snapshot.docs.length;
+      final nextId = 'COMP${(count + 1).toString().padLeft(3, '0')}';
+      
+      if (_companyIdController.text == _initialSuggestedId) {
+        setState(() {
+          _initialSuggestedId = nextId;
+          _companyIdController.text = nextId;
+        });
+      }
+    } catch (e) {
+      // Keep random fallback ID
+    }
+  }
 
   @override
   void dispose() {
@@ -114,10 +148,10 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
               children: [
                 Text(
                   'કંપની અને એડમિન વિગતો'.tr,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -125,7 +159,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                   'બધી વિગતો સાચી ભરો જેથી એડમિન લોગીન આઈડી બની શકે.'.tr,
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.white.withOpacity(0.6),
+                    color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white.withOpacity(0.6),
                   ),
                 ),
                 
@@ -135,8 +169,19 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                 TextFormField(
                   controller: _companyIdController,
                   textCapitalization: TextCapitalization.characters,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: _buildInputDecoration('કંપની ID (દા.ત. COMP001)'.tr, Icons.badge_outlined, theme),
+                  style: TextStyle(color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white),
+                  decoration: _buildInputDecoration('કંપની ID (દા.ત. COMP001)'.tr, Icons.badge_outlined, theme).copyWith(
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.refresh_rounded, color: theme.colorScheme.primary),
+                      onPressed: () {
+                        setState(() {
+                          _initialSuggestedId = _generateRandomCompanyId();
+                          _companyIdController.text = _initialSuggestedId;
+                        });
+                      },
+                      tooltip: 'નવો ID જનરેટ કરો'.tr,
+                    ),
+                  ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'કૃપા કરીને કંપની ID દાખલ કરો'.tr;
@@ -153,7 +198,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                 // Company Name Field
                 TextFormField(
                   controller: _companyNameController,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white),
                   decoration: _buildInputDecoration('કંપનીનું નામ'.tr, Icons.business_rounded, theme),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -168,7 +213,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                 // Owner Name Field
                 TextFormField(
                   controller: _ownerNameController,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white),
                   decoration: _buildInputDecoration('ઓનરનું નામ'.tr, Icons.person_outline_rounded, theme),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -184,7 +229,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white),
                   decoration: _buildInputDecoration('એડમિન ઇમેલ એડ્રેસ'.tr, Icons.email_outlined, theme),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -203,15 +248,15 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white),
                   decoration: InputDecoration(
                     labelText: 'એડમિન પાસવર્ડ'.tr,
-                    labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+                    labelStyle: TextStyle(color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white.withOpacity(0.6)),
                     prefixIcon: Icon(Icons.lock_outlined, color: theme.colorScheme.primary),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                        color: Colors.white.withOpacity(0.6),
+                        color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white.withOpacity(0.6),
                       ),
                       onPressed: () {
                         setState(() {
@@ -221,7 +266,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                      borderSide: BorderSide(color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.1) : Colors.white.withOpacity(0.1)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -254,10 +299,10 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                 // Purchase Scheme Selector
                 Text(
                   'પર્ચેઝ સ્કીમ (Purchase Scheme)'.tr,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -266,14 +311,14 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                   decoration: BoxDecoration(
                     color: theme.cardColor,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    border: Border.all(color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.1) : Colors.white.withOpacity(0.1)),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       value: _purchaseScheme,
                       dropdownColor: theme.cardColor,
-                      style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
-                      icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+                      style: TextStyle(color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
+                      icon: Icon(Icons.arrow_drop_down, color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white),
                       isExpanded: true,
                       onChanged: (String? newValue) {
                         if (newValue != null) {
@@ -285,11 +330,11 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                       items: [
                         DropdownMenuItem(
                           value: 'offline',
-                          child: Text('ઓફલાઇન (Offline)'.tr),
+                          child: Text('ઓફલાઇન (Offline)'.tr, style: TextStyle(color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white)),
                         ),
                         DropdownMenuItem(
                           value: 'online',
-                          child: Text('ઓનલાઇન (Online)'.tr),
+                          child: Text('ઓનલાઇન (Online)'.tr, style: TextStyle(color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white)),
                         ),
                       ],
                     ),
@@ -301,10 +346,10 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                 // Subscription Expiry Selector
                 Text(
                   'સબ્સ્ક્રિપ્શન સમાપ્તિ તારીખ'.tr,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -316,7 +361,7 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                     decoration: BoxDecoration(
                       color: theme.cardColor,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withOpacity(0.1)),
+                      border: Border.all(color: theme.brightness == Brightness.light ? Colors.black.withOpacity(0.1) : Colors.white.withOpacity(0.1)),
                     ),
                     child: Row(
                       children: [
@@ -325,14 +370,14 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
                         Expanded(
                           child: Text(
                             DateFormat('dd-MM-yyyy (dd MMM yyyy)').format(_expiryDate),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: theme.brightness == Brightness.light ? Colors.black87 : Colors.white,
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
-                        Icon(Icons.arrow_drop_down, color: Colors.white.withOpacity(0.6)),
+                        Icon(Icons.arrow_drop_down, color: theme.brightness == Brightness.light ? Colors.black54 : Colors.white.withOpacity(0.6)),
                       ],
                     ),
                   ),
@@ -383,13 +428,14 @@ class _RegisterCompanyPageState extends State<RegisterCompanyPage> {
   }
 
   InputDecoration _buildInputDecoration(String label, IconData icon, ThemeData theme) {
+    final isLight = theme.brightness == Brightness.light;
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+      labelStyle: TextStyle(color: isLight ? Colors.black54 : Colors.white.withOpacity(0.6)),
       prefixIcon: Icon(icon, color: theme.colorScheme.primary),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+        borderSide: BorderSide(color: isLight ? Colors.black.withOpacity(0.1) : Colors.white.withOpacity(0.1)),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
